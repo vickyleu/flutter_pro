@@ -24,7 +24,7 @@ dependencies:
   json_annotation: ^4.0.1
   equatable: ^2.0.3
   shared_preferences: ^2.0.7
-  freezed_annotation: ^0.14.2
+  freezed_annotation: "0.14.0"
   sp_util: ^2.0.3
   pull_to_refresh: ^2.0.0
   lottie: ^1.1.0
@@ -32,13 +32,21 @@ dependencies:
   extended_image: ^4.1.0
   google_fonts: ^2.1.0
 
-dev_dependencies:
+dev_dependencies:  #flutter pub run build_runner build --delete-conflicting-outputs
   flutter_test:
     sdk: flutter
   retrofit_generator: ^2.0.1
   build_runner: ^2.1.2
   json_serializable: ^4.1.4
-  freezed: ^0.14.2
+  freezed: "0.14.0"
+
+dependency_overrides:
+  source_gen: ^1.0.0
+  build: ^2.0.0
+  build_runner: ^2.1.2
+  build_config: any
+  freezed_annotation: "0.14.0"
+  freezed: "0.14.0"
 
 flutter:
   uses-material-design: true
