@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pro_flutter/models/comments_posts_model.dart';
 import 'package:pro_flutter/models/details_params.dart';
@@ -24,7 +24,7 @@ import 'package:sp_util/sp_util.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 final postsDetailsProvider = StateNotifierProvider.autoDispose
-    .family<DetailsViewModel, DetailsParams>((ref, params) {
+    .family<DetailsViewModel,dynamic, DetailsParams>((ref, params) {
   ref.onDispose(() => StatusBarUtil.setStatusBar(Brightness.dark));
   return DetailsViewModel(params);
 });
@@ -81,7 +81,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
       body: Consumer(builder: (context, watch, _) {
         final detailsState = watch(postsDetailsProvider(
                 DetailsParams(userId: widget.userId, postId: widget.postId))
-            .state);
+            .notifier).state;
         return CommonBasePage(
           pageState: detailsState.pageState,
           baseError: detailsState.error,

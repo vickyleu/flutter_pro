@@ -1,14 +1,12 @@
 .DS_Store
 .dart_tool/
-
+**/**.lock
+**/**-plugins*
 .packages
 .pub/
-
+.idea
 build/
 
-.flutter-plugins
-
-# Created by https://www.gitignore.io/api/node
 
 ### Node ###
 # Logs

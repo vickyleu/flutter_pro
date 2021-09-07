@@ -35,7 +35,7 @@ class BaseDio {
   BaseError getDioError(Object obj) {
     switch (obj.runtimeType) {
       case DioError:
-        if ((obj as DioError).type == DioErrorType.RESPONSE) {
+        if ((obj as DioError).type == DioErrorType.response) {
           final response = (obj as DioError).response;
           if (response.statusCode == 401) {
             return NeedLogin();

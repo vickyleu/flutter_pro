@@ -1,4 +1,4 @@
-import 'dart:io';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -13,10 +13,10 @@ class ImagePaper extends StatefulWidget {
 
   const ImagePaper(
       {Key key,
-      this.post,
-      this.placeholder = 'assets/images/animationImage.gif',
-      this.knowImageSize,
-      this.index})
+        this.post,
+        this.placeholder = 'assets/images/animationImage.gif',
+        this.knowImageSize,
+        this.index})
       : super(key: key);
 
   @override
@@ -109,36 +109,64 @@ class _ImagePaperState extends State<ImagePaper>
             );
             break;
         }
-
         _image = GestureDetector(
           child: _image,
           onTap: () {
             Navigator.push(
-              context,
-              Platform.isAndroid
-                  ? TransparentMaterialPageRoute(
-                      builder: (context) => PicSwiper(
-                        post: widget.post,
-                        index: widget.index,
-                        pics: lists
-                            .map((e) => PicSwiperItem(picUrl: e.mediumImageUrl))
-                            .toList(),
-                      ),
-                    )
-                  : TransparentCupertinoPageRoute(
-                      builder: (context) => PicSwiper(
-                        post: widget.post,
-                        index: widget.index,
-                        pics: lists
-                            .map((e) => PicSwiperItem(picUrl: e.mediumImageUrl))
-                            .toList(),
-                      ),
-                    ),
+              context,TransparentPageRoute(
+              pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) => PicSwiper(
+                post: widget.post,
+                index: widget.index,
+                pics: lists
+                    .map((e) => PicSwiperItem(picUrl: e.mediumImageUrl))
+                    .toList(),
+              ),
+            )   ,
             );
           },
         );
         return _image;
       },
+    );
+  }
+}
+
+
+/// Transparent Page Route
+class TransparentPageRoute<T> extends PageRouteBuilder<T> {
+  TransparentPageRoute({
+    RouteSettings settings,
+    @required RoutePageBuilder pageBuilder,
+    RouteTransitionsBuilder transitionsBuilder = _defaultTransitionsBuilder,
+    Duration transitionDuration = const Duration(milliseconds: 150),
+    bool barrierDismissible = false,
+    Color barrierColor,
+    String barrierLabel,
+    bool maintainState = true,
+  }) : super(
+    settings: settings,
+    opaque: false,
+    pageBuilder: pageBuilder,
+    transitionsBuilder: transitionsBuilder,
+    transitionDuration: transitionDuration,
+    barrierDismissible: barrierDismissible,
+    barrierColor: barrierColor,
+    barrierLabel: barrierLabel,
+    maintainState: maintainState,
+  );
+
+  static Widget _defaultTransitionsBuilder(
+      BuildContext context,
+      Animation<double> animation,
+      Animation<double> secondaryAnimation,
+      Widget child,
+      ) {
+    return FadeTransition(
+      opacity: CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeOut,
+      ),
+      child: child,
     );
   }
 }

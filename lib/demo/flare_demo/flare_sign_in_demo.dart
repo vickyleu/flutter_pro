@@ -35,7 +35,7 @@ class _FlareSignInDemoState extends State<FlareSignInDemo> {
         child: Consumer(
           builder: (context, watch, _) {
             final loginModel = watch(loginProvider);
-            final loginState = watch(loginProvider.state);
+            final loginState = watch(loginProvider.notifier).state;
             return Container(
               child: Stack(
                 children: <Widget>[

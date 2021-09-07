@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pro_flutter/models/category_model.dart';
 import 'package:pro_flutter/pages/home/posts_page_category.dart';
 import 'package:pro_flutter/utils/screen_util.dart';
@@ -10,7 +10,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 final categoryTabProvider =
     StateNotifierProvider((ref) => CategoryTabViewModel());
-final postsProvider = StateNotifierProvider.family<PostsViewModel, int>(
+final postsProvider = StateNotifierProvider.family<PostsViewModel,dynamic, int>(
     (ref, categoryId) => PostsViewModel(categoryId));
 
 class PostsPage extends StatefulWidget {
@@ -43,7 +43,7 @@ class _PostsPageState extends State<PostsPage>
   Widget build(BuildContext context) {
     super.build(context);
     return Consumer(builder: (context, watch, _) {
-      List<Category> categories = watch(categoryTabProvider.state).categories;
+      List<Category> categories = watch(categoryTabProvider.notifier).state.categories;
       _initTabs(categories);
       return DefaultTabController(
         length: _tabs.length,

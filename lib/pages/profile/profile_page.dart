@@ -19,7 +19,7 @@ import 'package:sp_util/sp_util.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 final profileProvider =
-    StateNotifierProvider.family<ProfileViewModel, int>((ref, userId) {
+    StateNotifierProvider.family<ProfileViewModel,dynamic,int>((ref, userId) {
   return ProfileViewModel(userId);
 });
 
@@ -49,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       backgroundColor: Color.fromRGBO(249, 249, 249, 1),
       body: Consumer(builder: (context, watch, _) {
-        final profileState = watch(profileProvider(_userId).state);
+        final profileState = watch(profileProvider(_userId).notifier).state;
         textSize = profileState.textSize;
         if (profileState.pageState == PageState.busyState ||
             profileState.pageState == PageState.initializedState) {

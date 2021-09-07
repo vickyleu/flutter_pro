@@ -6,7 +6,7 @@ import 'package:flare_flutter/flare_controls.dart';
 import 'package:flare_dart/math/mat2d.dart';
 import 'package:flare_dart/math/vec2d.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pro_flutter/demo/flare_demo/flare_sign_in_demo.dart';
 
 class FlareSignInController extends FlareControls {
@@ -108,8 +108,7 @@ class FlareSignInController extends FlareControls {
 
   void submitPassword(BuildContext context) async {
     await context.read(loginProvider).login(_name, _password);
-    final loginState = context.read(loginProvider.state);
-
+    final loginState = context.read(loginProvider.notifier).state;
     if (loginState.isLogin) {
       play("success");
       Navigator.pop(context, loginState);
