@@ -49,36 +49,33 @@ class PostState {
   }
 }
 
-/**
- * 获取分类tab数据
- */
+/// 获取分类tab数据
 class CategoryTabViewModel extends StateNotifier<PostState> {
   CategoryTabViewModel([PostState? state])
       : super(state ?? PostState.initial()) {
     getCategory();
   }
 
-  /**
-   * 获取分类列表
-   */
+  /// 获取分类列表
   Future<void> getCategory() async {
     try {
+      print("categories::categoryModel");
       CategoryModel categoryModel = await ApiClient().getCategory();
+      print("categories::${categoryModel}");
       if (categoryModel.message == 'success') {
         state = state.copyWith(categories: [...categoryModel.data!]);
       }
     } catch (e) {
+      print("categories::${e}");
       state = state.copyWith(
           pageState: PageState.errorState,
-          error: BaseDio.getInstance()!.getDioError(e));
+          error: BaseDio.getInstance().getDioError(e));
     }
   }
 }
 
-/**
- * 获取分类数据，首页和关注页数据不属于任何分类，
- * 需要根据需求自定义查询需要的数据。
- */
+/// 获取分类数据，首页和关注页数据不属于任何分类，
+/// 需要根据需求自定义查询需要的数据。
 class PostsViewModel extends StateNotifier<PostState> {
   PostsViewModel(int categoryId, [PostState? state]) : super(state ?? PostState.initial()) {
     getPosts(categoryId);
@@ -93,9 +90,7 @@ class PostsViewModel extends StateNotifier<PostState> {
     );
   }
 
-  /**
-   * 点赞
-   */
+  /// 点赞
   Future<void> clickLike(int postId, int index) async {
     try {
       BaseModel data = await ApiClient().like(postId);
@@ -105,13 +100,11 @@ class PostsViewModel extends StateNotifier<PostState> {
     } catch (e) {
       state = state.copyWith(
           pageState: PageState.errorState,
-          error: BaseDio.getInstance()!.getDioError(e));
+          error: BaseDio.getInstance().getDioError(e));
     }
   }
 
-  /**
-   * 根据id 更新这条数据
-   */
+  /// 根据id 更新这条数据
   Future<void> updatePostById(int postId, int index) async {
     try {
       SinglePostModel postModel =
@@ -121,13 +114,11 @@ class PostsViewModel extends StateNotifier<PostState> {
     } catch (e) {
       state = state.copyWith(
           pageState: PageState.errorState,
-          error: BaseDio.getInstance()!.getDioError(e));
+          error: BaseDio.getInstance().getDioError(e));
     }
   }
 
-  /**
-   * 获取文章列表
-   */
+  /// 获取文章列表
   Future<void> getPosts(int categoryId, {bool isRefresh = false}) async {
     if (state.pageState == PageState.initializedState) {
       state = state.copyWith(pageState: PageState.busyState);
@@ -182,7 +173,7 @@ class PostsViewModel extends StateNotifier<PostState> {
     } catch (e) {
       state = state.copyWith(
           pageState: PageState.errorState,
-          error: BaseDio.getInstance()!.getDioError(e));
+          error: BaseDio.getInstance().getDioError(e));
     }
   }
 }

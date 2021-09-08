@@ -85,7 +85,7 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
       } else {
         state = state.copyWith(
             pageState: PageState.errorState,
-            error: BaseDio.getInstance()!.getDioError(e));
+            error: BaseDio.getInstance().getDioError(e));
       }
     }
   }
@@ -102,7 +102,7 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
     } catch (e) {
       state = state.copyWith(
           pageState: PageState.errorState,
-          error: BaseDio.getInstance()!.getDioError(e));
+          error: BaseDio.getInstance().getDioError(e));
     }
   }
 }

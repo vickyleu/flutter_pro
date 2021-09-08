@@ -203,28 +203,28 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
     final size = MediaQuery.of(context).size;
 
     /// 当前文章数据
-    final post = detailsState?.post!;
+    final post = detailsState.post!;
 
     /// 其他文章数据
-    final restPosts = detailsState?.restPosts!;
+    final restPosts = detailsState.restPosts!;
 
     /// 评论数据
-    final comments = detailsState?.comments!;
+    final comments = detailsState.comments!;
 
     /// 如果当前文章在其他作品中，就过滤掉当前作品
     var postIndex = -1;
-    restPosts?.forEach((element) {
-      if (element.id == post?.id) {
+    restPosts.forEach((element) {
+      if (element.id == post.id) {
         postIndex = restPosts.indexOf(element);
       }
     });
     if (postIndex >= 0) {
-      restPosts?.removeAt(postIndex);
+      restPosts.removeAt(postIndex);
     }
 
     /// 在图片未加载出之前，计算出图片的高度
-    imageHeight = post?.coverImage != null
-        ? (post?.coverImage?.height??0) / ((post?.coverImage?.width??0) / size.width)
+    imageHeight = post.coverImage != null
+        ? (post.coverImage?.height??0) / ((post.coverImage?.width??0) / size.width)
         : 0;
 
     return Container(
@@ -256,10 +256,10 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
                   _createImage(post),
 
                   /// 其他作品标题
-                  (restPosts?.isNotEmpty??false) ? _createRestTitle() : Container(),
+                  (restPosts.isNotEmpty) ? _createRestTitle() : Container(),
 
                   /// 其他作品内容
-                  (restPosts?.isNotEmpty??false)
+                  (restPosts.isNotEmpty)
                       ? _createRestImage(restPosts)
                       : Container(),
 
@@ -267,7 +267,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
                   _createCommentTitle(comments),
 
                   /// 暂无评论缺省页
-                  (comments?.isEmpty??true)
+                  (comments.isEmpty)
                       ? _createNoComment()
                       : _createComment(comments),
                   Container(
@@ -845,7 +845,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
             BorderRadius.vertical(bottom: Radius.circular(36)),
             child: Container(
               child: ImagePaper(
-                index: lists?.indexOf(file),
+                index: lists.indexOf(file),
                 post: post,
                 knowImageSize: false,
               ),
@@ -856,7 +856,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
             borderRadius: BorderRadius.vertical(top: Radius.circular(36)),
             child: Container(
               child: ImagePaper(
-                index: lists?.indexOf(file),
+                index: lists.indexOf(file),
                 post: post,
                 knowImageSize: false,
               ),
@@ -865,7 +865,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
         } else {
           return Container(
             child: ImagePaper(
-              index: lists?.indexOf(file),
+              index: lists.indexOf(file),
               post: post,
               knowImageSize: false,
             ),

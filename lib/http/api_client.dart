@@ -15,7 +15,7 @@ part 'api_client.g.dart';
 @RestApi(baseUrl: 'https://api.lishaoy.net')
 abstract class ApiClient {
   factory ApiClient({Dio? dio, String? baseUrl}) {
-    dio ??= BaseDio.getInstance()!.getDio();
+    dio ??= BaseDio.getInstance().getDio();
     return _ApiClient(dio, baseUrl: baseUrl);
   }
 

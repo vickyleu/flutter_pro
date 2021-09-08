@@ -8,8 +8,9 @@ import 'package:pro_flutter/widgets/custom_tabs.dart' as CustomTabBar;
 import 'package:pro_flutter/widgets/custom_indicator.dart' as CustomIndicator;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-final categoryTabProvider =
-    StateNotifierProvider((ref) => CategoryTabViewModel());
+final categoryTabProvider = StateNotifierProvider((ref) => CategoryTabViewModel());
+
+
 final StateNotifierProviderFamily<PostsViewModel, dynamic, int>? postsProvider = StateNotifierProvider.family<PostsViewModel,dynamic, int>(
     (ref, categoryId) => PostsViewModel(categoryId));
 
@@ -44,6 +45,7 @@ class _PostsPageState extends State<PostsPage>
     super.build(context);
     return Consumer(builder: (context, watch, _) {
       List<Category> categories = watch(categoryTabProvider.notifier).state.categories!;
+
       _initTabs(categories);
       return DefaultTabController(
         length: _tabs.length,
@@ -92,7 +94,7 @@ class _PostsPageState extends State<PostsPage>
           },
         ),
       );
-    } as Widget Function(BuildContext, T Function<T>(ProviderBase<Object?, T>), Widget?));
+    });
   }
 
   List<Widget> _createTabPage(List<Category> categories) {
@@ -156,7 +158,7 @@ class _PostsPageState extends State<PostsPage>
           ),
           insets: EdgeInsets.zero),
       isScrollable: true,
-      tabs: _tabs ?? [],
+      tabs: _tabs,
     );
   }
 

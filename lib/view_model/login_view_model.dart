@@ -51,7 +51,7 @@ class LoginViewModel extends StateNotifier<LoginState> {
     } catch (e) {
       state = state.copyWith(
         pageState: PageState.errorState,
-        error: BaseDio.getInstance()!.getDioError(e),
+        error: BaseDio.getInstance().getDioError(e),
       );
     }
   }

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:pro_flutter/http/base_error.dart';
@@ -8,10 +11,10 @@ class BaseDio {
 
   static BaseDio? _instance;
 
-  static BaseDio? getInstance() {
+  static BaseDio getInstance() {
     _instance ??= BaseDio._();
 
-    return _instance;
+    return _instance!;
   }
 
   Dio getDio() {
@@ -25,13 +28,20 @@ class BaseDio {
       responseHeader: false,
       compact: false,
     ));
-
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
+      if (!(const bool.fromEnvironment("dart.vm.product"))) {
+        client.findProxy = (uri) {
+          return "PROXY 192.168.2.1:8888";
+        };
+        client.badCertificateCallback = (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      }
+    };
     return dio;
   }
 
-  /**
-   * 这里封装了一个 BaseError 类，会根据后端返回的code返回不同的错误类
-   */
+  /// 这里封装了一个 BaseError 类，会根据后端返回的code返回不同的错误类
   BaseError getDioError(Object obj) {
     switch (obj.runtimeType) {
       case DioError:
