@@ -7,11 +7,11 @@ class FutureBuilderDemo extends StatelessWidget {
       appBar: AppBar(
         title: Text('Future Builder Demo'),
       ),
-      body: FutureBuilder(
+      body: FutureBuilder<List<String>>(
         future: _getListData(),
         builder: (buildContext, snapshot) {
           if (snapshot.hasError) {
-            return _getInfoMessage(snapshot.error);
+            return _getInfoMessage(snapshot.error as String);
           }
 
           if (!snapshot.hasData) {
@@ -23,17 +23,17 @@ class FutureBuilderDemo extends StatelessWidget {
             );
           }
           var listData = snapshot.data;
-          if (listData.length == 0) {
+          if (listData?.length == 0) {
             return _getInfoMessage('No data found');
           }
 
           return ListView.builder(
-            itemCount: listData.length,
+            itemCount: listData?.length,
             itemBuilder: (buildContext, index) {
               return Column(
                 children: <Widget>[
                   ListTile(
-                    title: Text(listData[index]),
+                    title: Text(listData![index]),
                   ),
                   Divider(),
                 ],
@@ -60,7 +60,7 @@ class FutureBuilderDemo extends StatelessWidget {
     }
 
     if (!hasData) {
-      return List<String>();
+      return <String>[];
     }
 
     return List<String>.generate(10, (index) => '$index content');

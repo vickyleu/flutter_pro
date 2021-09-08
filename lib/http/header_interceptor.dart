@@ -5,7 +5,7 @@ class HeaderInterceptor extends Interceptor {
 
   @override
   Future onRequest(RequestOptions options, RequestInterceptorHandler handler)async {
-    String headers = await SpUtil.getString('Authorization');
+    String? headers = await SpUtil.getString('Authorization');
     options.headers.addAll({'Authorization': headers});
     return options;
   }

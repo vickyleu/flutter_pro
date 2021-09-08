@@ -14,7 +14,7 @@ class ListViewDemo extends StatelessWidget {
               AspectRatio(
                 aspectRatio: 16 / 9,
                 child: Image.network(
-                  posts[index].imageUrl,
+                  posts[index].imageUrl!,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -22,11 +22,11 @@ class ListViewDemo extends StatelessWidget {
                 height: 12.0,
               ),
               Text(
-                posts[index].title,
+                posts[index].title!,
                 style: Theme.of(context).textTheme.headline6,
               ),
               Text(
-                posts[index].author,
+                posts[index].author!,
                 style: Theme.of(context).textTheme.headline6,
               ),
               SizedBox(

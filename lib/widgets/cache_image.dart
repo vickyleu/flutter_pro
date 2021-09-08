@@ -8,7 +8,7 @@ class CacheImage extends StatefulWidget {
   final width;
   final height;
 
-  const CacheImage({Key key, @required this.url, this.placeholder = 'assets/images/animationImage.gif', this.width, this.height}) : super(key: key);
+  const CacheImage({Key? key, required this.url, this.placeholder = 'assets/images/animationImage.gif', this.width, this.height}) : super(key: key);
 
   @override
   _CacheImageState createState() => _CacheImageState();
@@ -16,7 +16,7 @@ class CacheImage extends StatefulWidget {
 
 class _CacheImageState extends State<CacheImage>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  late AnimationController _controller;
 
   @override
   void initState() {

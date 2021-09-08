@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class ErrorPage extends StatelessWidget {
-  final Widget icon;
-  final String title;
-  final String desc;
-  final String buttonText;
-  final VoidCallback buttonAction;
-  final VoidCallback helpAction;
+  final Widget? icon;
+  final String? title;
+  final String? desc;
+  final String? buttonText;
+  final VoidCallback? buttonAction;
+  final VoidCallback? helpAction;
   final bool isEmptyPage;
 
   ErrorPage(
@@ -74,7 +74,7 @@ class ErrorPage extends StatelessWidget {
                 ? Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: MaterialButton(
-                      onPressed: () => this.buttonAction(),
+                      onPressed: () => this.buttonAction!(),
                       child: Text(
                         this.buttonText ?? '刷新',
                         style: TextStyle(fontSize: 16, color: Colors.white),

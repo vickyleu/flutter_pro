@@ -3,17 +3,17 @@
 /// message : "success"
 
 class CategoryModel {
-  int _code;
-  List<Category> _data;
-  String _message;
+  int? _code;
+  List<Category>? _data;
+  String? _message;
 
-  int get code => _code;
+  int? get code => _code;
 
-  List<Category> get data => _data;
+  List<Category>? get data => _data;
 
-  String get message => _message;
+  String? get message => _message;
 
-  CategoryModel({int code, List<Category> data, String message}) {
+  CategoryModel({int? code, List<Category>? data, String? message}) {
     _code = code;
     _data = data;
     _message = message;
@@ -24,7 +24,7 @@ class CategoryModel {
     if (json["data"] != null) {
       _data = [];
       json["data"].forEach((v) {
-        _data.add(Category.fromJson(v));
+        _data!.add(Category.fromJson(v));
       });
     }
     _message = json["message"];
@@ -34,7 +34,7 @@ class CategoryModel {
     var map = <String, dynamic>{};
     map["code"] = _code;
     if (_data != null) {
-      map["data"] = _data.map((v) => v.toJson()).toList();
+      map["data"] = _data!.map((v) => v.toJson()).toList();
     }
     map["message"] = _message;
     return map;
@@ -44,14 +44,14 @@ class CategoryModel {
 /// name : "摄影"
 
 class Category {
-  String _name;
-  int _id;
+  String? _name;
+  int? _id;
 
-  String get name => _name;
+  String? get name => _name;
 
-  int get id => _id;
+  int? get id => _id;
 
-  Category({String name, int id}) {
+  Category({String? name, int? id}) {
     _name = name;
     _id = id;
   }

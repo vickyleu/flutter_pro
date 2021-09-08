@@ -57,7 +57,7 @@ class SliverListDemo extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
                       child: Image.network(
-                        posts[index].imageUrl,
+                        posts[index].imageUrl!,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -73,7 +73,7 @@ class SliverListDemo extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              posts[index].title,
+                              posts[index].title!,
                               style: TextStyle(
                                 fontSize: 18.0,
                                 color: Colors.white,
@@ -81,7 +81,7 @@ class SliverListDemo extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              posts[index].author,
+                              posts[index].author!,
                               style: TextStyle(
                                 fontSize: 12.0,
                                 color: Colors.white,
@@ -119,7 +119,7 @@ class SliverGridDemo extends StatelessWidget {
             fit: StackFit.expand,
             children: <Widget>[
               Image.network(
-                posts[index].imageUrl,
+                posts[index].imageUrl!,
                 fit: BoxFit.cover,
               ),
               Positioned(
@@ -132,14 +132,14 @@ class SliverGridDemo extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        posts[index].title,
+                        posts[index].title!,
                         style: TextStyle(
                           fontSize: 12.0,
                           color: Colors.white,
                         ),
                       ),
                       Text(
-                        posts[index].author,
+                        posts[index].author!,
                         style: TextStyle(
                           fontSize: 10.0,
                           color: Colors.white,

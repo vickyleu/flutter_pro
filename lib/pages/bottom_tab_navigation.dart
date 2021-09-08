@@ -13,7 +13,7 @@ class BottomTabNavigation extends StatefulWidget {
 
 class _BottomTabNavigationState extends State<BottomTabNavigation>
     with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
-  PageController _pageController;
+  PageController? _pageController;
   int _currentIndex = 0;
 
   @override
@@ -26,7 +26,7 @@ class _BottomTabNavigationState extends State<BottomTabNavigation>
   @override
   void dispose() {
     super.dispose();
-    _pageController.dispose();
+    _pageController!.dispose();
   }
 
   @override
@@ -110,7 +110,7 @@ class _BottomTabNavigationState extends State<BottomTabNavigation>
     );
   }
 
-  IconButton _createIconButton(int index ,{Icon icon, double iconSize}) {
+  IconButton _createIconButton(int index ,{Icon? icon, double? iconSize}) {
     return IconButton(
       iconSize: iconSize ?? 26,
       icon: icon ?? Icon(IconFont.icon_home),
@@ -118,7 +118,7 @@ class _BottomTabNavigationState extends State<BottomTabNavigation>
       onPressed: () {
         setState(() {
           _currentIndex = index;
-          _pageController.animateToPage(_currentIndex,
+          _pageController!.animateToPage(_currentIndex,
               curve: Curves.easeIn, duration: Duration(milliseconds: 160));
         });
       },

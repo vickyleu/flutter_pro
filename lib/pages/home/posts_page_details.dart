@@ -23,17 +23,17 @@ import 'package:pro_flutter/widgets/page_state.dart';
 import 'package:sp_util/sp_util.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-final postsDetailsProvider = StateNotifierProvider.autoDispose
+final AutoDisposeStateNotifierProviderFamily<DetailsViewModel, dynamic, DetailsParams>? postsDetailsProvider = StateNotifierProvider.autoDispose
     .family<DetailsViewModel,dynamic, DetailsParams>((ref, params) {
   ref.onDispose(() => StatusBarUtil.setStatusBar(Brightness.dark));
   return DetailsViewModel(params);
 });
 
 class PostsPageDetails extends StatefulWidget {
-  final int postId;
-  final int userId;
+  final int? postId;
+  final int? userId;
 
-  PostsPageDetails({@required this.postId, @required this.userId});
+  PostsPageDetails({required this.postId, required this.userId});
 
   @override
   _PostsPageDetailsState createState() => _PostsPageDetailsState();
@@ -41,10 +41,10 @@ class PostsPageDetails extends StatefulWidget {
 
 class _PostsPageDetailsState extends State<PostsPageDetails>
     with WidgetsBindingObserver {
-  double imageHeight;
+  late double imageHeight;
   String inputText = '';
   String hintText = '说点什么...';
-  int repCommentId;
+  int? repCommentId;
   double appBarAlpha = 0;
   bool isShowBottomBar = true;
   bool isShowBottomInputBar = false;
@@ -52,14 +52,14 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
   final commentKey = new GlobalKey();
 
   Duration duration = Duration(milliseconds: 360);
-  ScrollController _scrollController;
-  TextEditingController _editingController;
+  ScrollController? _scrollController;
+  TextEditingController? _editingController;
 
   @override
   void initState() {
     _scrollController = ScrollController();
     _editingController = TextEditingController();
-    _scrollController.addListener(() {
+    _scrollController!.addListener(() {
       _watchScroll();
     });
 
@@ -68,8 +68,8 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
 
   @override
   void dispose() {
-    _scrollController.dispose();
-    _editingController.dispose();
+    _scrollController!.dispose();
+    _editingController!.dispose();
     super.dispose();
   }
 
@@ -79,44 +79,41 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
 
     return Scaffold(
       body: Consumer(builder: (context, watch, _) {
-        final detailsState = watch(postsDetailsProvider(
-                DetailsParams(userId: widget.userId, postId: widget.postId))
+        final DetailsState? detailsState = watch(postsDetailsProvider!(
+            DetailsParams(userId: widget.userId!, postId: widget.postId!))
             .notifier).state;
         return CommonBasePage(
-          pageState: detailsState.pageState,
-          baseError: detailsState.error,
+          pageState: detailsState?.pageState,
+          baseError: detailsState?.error,
           buttonActionCallback: () {
-            context.refresh(postsDetailsProvider(
-                DetailsParams(userId: widget.userId, postId: widget.postId)));
+            context.refresh(postsDetailsProvider!(
+                DetailsParams(userId: widget.userId!, postId: widget.postId!)));
             appBarAlpha = 0;
             isShowBottomBar = true;
           },
           child: Builder(
             builder: (BuildContext context) {
               final size = MediaQuery.of(context).size;
-
               /// 当前文章数据
               final post = detailsState?.post;
-
               /// 其他文章数据
               final restPosts = detailsState?.restPosts;
-
               /// 评论数据
               final comments = detailsState?.comments;
 
               /// 如果当前文章在其他作品中，就过滤掉当前作品
               var postIndex = -1;
-              restPosts.forEach((element) {
-                if (element.id == post.id) {
+              restPosts?.forEach((element) {
+                if (element.id == post?.id) {
                   postIndex = restPosts.indexOf(element);
                 }
               });
               if (postIndex >= 0) {
-                restPosts.removeAt(postIndex);
+                restPosts?.removeAt(postIndex);
               }
               /// 在图片未加载出之前，计算出图片的高度
               imageHeight = post?.coverImage != null
-                  ? post.coverImage.height / (post.coverImage.width / size.width)
+                  ? (post?.coverImage?.height??0) / ((post?.coverImage?.width??0) / size.width)
                   : 0;
               return Container(
                 height: size.height,
@@ -147,10 +144,10 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
                             _createImage(post),
 
                             /// 其他作品标题
-                            restPosts.isNotEmpty ? _createRestTitle() : Container(),
+                            (restPosts?.isEmpty??true) ? _createRestTitle() : Container(),
 
                             /// 其他作品内容
-                            restPosts.isNotEmpty
+                            (restPosts?.isEmpty??true)
                                 ? _createRestImage(restPosts)
                                 : Container(),
 
@@ -158,7 +155,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
                             _createCommentTitle(comments),
 
                             /// 暂无评论缺省页
-                            comments.isEmpty
+                            (comments?.isEmpty??true)
                                 ? _createNoComment()
                                 : _createComment(comments),
                             Container(
@@ -206,28 +203,28 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
     final size = MediaQuery.of(context).size;
 
     /// 当前文章数据
-    final post = detailsState?.post;
+    final post = detailsState?.post!;
 
     /// 其他文章数据
-    final restPosts = detailsState?.restPosts;
+    final restPosts = detailsState?.restPosts!;
 
     /// 评论数据
-    final comments = detailsState?.comments;
+    final comments = detailsState?.comments!;
 
     /// 如果当前文章在其他作品中，就过滤掉当前作品
     var postIndex = -1;
-    restPosts.forEach((element) {
-      if (element.id == post.id) {
+    restPosts?.forEach((element) {
+      if (element.id == post?.id) {
         postIndex = restPosts.indexOf(element);
       }
     });
     if (postIndex >= 0) {
-      restPosts.removeAt(postIndex);
+      restPosts?.removeAt(postIndex);
     }
 
     /// 在图片未加载出之前，计算出图片的高度
     imageHeight = post?.coverImage != null
-        ? post.coverImage.height / (post.coverImage.width / size.width)
+        ? (post?.coverImage?.height??0) / ((post?.coverImage?.width??0) / size.width)
         : 0;
 
     return Container(
@@ -259,10 +256,10 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
                   _createImage(post),
 
                   /// 其他作品标题
-                  restPosts.isNotEmpty ? _createRestTitle() : Container(),
+                  (restPosts?.isNotEmpty??false) ? _createRestTitle() : Container(),
 
                   /// 其他作品内容
-                  restPosts.isNotEmpty
+                  (restPosts?.isNotEmpty??false)
                       ? _createRestImage(restPosts)
                       : Container(),
 
@@ -270,7 +267,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
                   _createCommentTitle(comments),
 
                   /// 暂无评论缺省页
-                  comments.isEmpty
+                  (comments?.isEmpty??true)
                       ? _createNoComment()
                       : _createComment(comments),
                   Container(
@@ -300,90 +297,90 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
   Widget _createBottomInputBar() {
     return isShowBottomInputBar
         ? Positioned(
-            bottom: 0,
-            child: Container(
-              height: 46,
-              padding: EdgeInsets.fromLTRB(14, 2, 6, 2),
-              width: ScreenUtil.instance.width,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black87.withOpacity(0.1),
-                    blurRadius: 8.0,
-                    spreadRadius: 1,
+      bottom: 0,
+      child: Container(
+        height: 46,
+        padding: EdgeInsets.fromLTRB(14, 2, 6, 2),
+        width: ScreenUtil.instance!.width,
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black87.withOpacity(0.1),
+              blurRadius: 8.0,
+              spreadRadius: 1,
+            ),
+          ],
+          color: Colors.white,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _editingController,
+                onChanged: (value) {
+                  inputText = value;
+                },
+                autofocus: true,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w300,
+                ),
+                //输入文本的样式
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: hintText,
+                  hintStyle: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey.shade400,
                   ),
-                ],
-                color: Colors.white,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _editingController,
-                      onChanged: (value) {
-                        inputText = value;
-                      },
-                      autofocus: true,
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.black87,
-                        fontWeight: FontWeight.w300,
-                      ),
-                      //输入文本的样式
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: hintText,
-                        hintStyle: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey.shade400,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 14),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(
-                      top: 5,
-                      bottom: 5,
-                    ),
-                    child: GradientButton(
-                      width: 66,
-                      borderRadius: 4.0,
-                      child: Text(
-                        '发送',
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.86),
-                        ),
-                      ),
-                      onPressed: () async {
-                        if (isRepComment) {
-                          await _sendComment(commentId: repCommentId);
-                        } else {
-                          await _sendComment();
-                        }
-                      },
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-          )
+            Padding(
+              padding: EdgeInsets.only(right: 14),
+            ),
+            Container(
+              padding: EdgeInsets.only(
+                top: 5,
+                bottom: 5,
+              ),
+              child: GradientButton(
+                width: 66,
+                borderRadius: 4.0,
+                child: Text(
+                  '发送',
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.86),
+                  ),
+                ),
+                onPressed: () async {
+                  if (isRepComment) {
+                    await _sendComment(commentId: repCommentId);
+                  } else {
+                    await _sendComment();
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    )
         : Container(
-            width: 0,
-            height: 0,
-          );
+      width: 0,
+      height: 0,
+    );
   }
 
-  Future _sendComment({int commentId}) async {
+  Future _sendComment({int? commentId}) async {
     if (inputText.isNotEmpty) {
       final detailViewModel = context.read(
-        postsDetailsProvider(
+        postsDetailsProvider!(
           DetailsParams(
-            userId: widget.userId,
-            postId: widget.postId,
+            userId: widget.userId!,
+            postId: widget.postId!,
           ),
         ),
       );
@@ -394,8 +391,8 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
         await detailViewModel.createPostsComment(comment);
       }
       inputText = '';
-      _editingController.clear();
-      Scrollable.ensureVisible(commentKey.currentContext);
+      _editingController!.clear();
+      Scrollable.ensureVisible(commentKey.currentContext!);
       setState(() {
         isShowBottomInputBar = false;
       });
@@ -406,44 +403,44 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
   StatelessWidget _createIsShowInputBarLayer(BuildContext context) {
     return isShowBottomInputBar
         ? GestureDetector(
-            onTapDown: (e) {
-              _hideKeyword(context);
-            },
-            onHorizontalDragStart: (e) {
-              _hideKeyword(context);
-            },
-            child: Container(
-              color: Colors.transparent,
-            ),
-          )
+      onTapDown: (e) {
+        _hideKeyword(context);
+      },
+      onHorizontalDragStart: (e) {
+        _hideKeyword(context);
+      },
+      child: Container(
+        color: Colors.transparent,
+      ),
+    )
         : Container(
-            width: 0,
-            height: 0,
-          );
+      width: 0,
+      height: 0,
+    );
   }
 
   void _hideKeyword(BuildContext context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
     if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-      FocusManager.instance.primaryFocus.unfocus();
+      FocusManager.instance.primaryFocus!.unfocus();
     }
     setState(() {
       isShowBottomInputBar = false;
     });
   }
 
-  Container _createComment(List<Comments> comments) {
+  Container _createComment(List<Comments>? comments) {
     return Container(
       padding: EdgeInsets.all(10),
       child: Column(
         children: [
-          ...comments.map((comment) {
+          ...comments?.map((comment) {
             /// 时间格式化
             String timeline = TimelineUtil.format(
-                DateUtil.getDateMsByTimeStr(comment.createdAt),
+                DateUtil.getDateMsByTimeStr(comment.createdAt!)!,
                 locTimeMs: DateTime.now().millisecondsSinceEpoch,
                 locale: 'zh',
-                dayFormat: DayFormat.Common);
+                dayFormat: DayFormat.Common)!;
             return Container(
               padding: EdgeInsets.only(bottom: 32),
               child: Column(
@@ -460,7 +457,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
                 ],
               ),
             );
-          }).toList(),
+          }).toList()??[],
         ],
       ),
     );
@@ -469,57 +466,57 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
   Container _createCommentReply(Comments comment) {
     return comment.repComment != null
         ? Container(
-            padding: EdgeInsets.only(top: 12, right: 10),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 44,
-                ),
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.only(
-                      top: 16,
-                      left: 10,
-                      bottom: 16,
+      padding: EdgeInsets.only(top: 12, right: 10),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 44,
+          ),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.only(
+                top: 16,
+                left: 10,
+                bottom: 16,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: Colors.grey.withOpacity(0.12),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '@${comment.repComment!.userName}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'SourceHanSans',
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                      color: Colors.grey.withOpacity(0.12),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '@${comment.repComment.userName}',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'SourceHanSans',
-                          ),
-                          textAlign: TextAlign.start,
-                          softWrap: true,
-                        ),
-                        Padding(padding: EdgeInsets.only(top: 6)),
-                        Text(
-                          comment.repComment.content,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black38,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'SourceHanSans',
-                          ),
-                          textAlign: TextAlign.start,
-                          softWrap: true,
-                        ),
-                      ],
-                    ),
+                    textAlign: TextAlign.start,
+                    softWrap: true,
                   ),
-                ),
-              ],
+                  Padding(padding: EdgeInsets.only(top: 6)),
+                  Text(
+                    comment.repComment!.content!,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black38,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'SourceHanSans',
+                    ),
+                    textAlign: TextAlign.start,
+                    softWrap: true,
+                  ),
+                ],
+              ),
             ),
-          )
+          ),
+        ],
+      ),
+    )
         : Container();
   }
 
@@ -529,14 +526,14 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
         setState(() {
           isShowBottomInputBar = true;
           isRepComment = true;
-          hintText = '回复 ${comment.user.name}';
+          hintText = '回复 ${comment.user!.name}';
           repCommentId = comment.id;
         });
       },
       child: Container(
         padding: EdgeInsets.only(top: 12, left: 44),
         child: Text(
-          comment.content,
+          comment.content!,
           style: TextStyle(
             fontSize: 14,
             color: Colors.black87,
@@ -558,7 +555,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
           ClipOval(
             child: FadeInImage.memoryNetwork(
               placeholder: kTransparentImage,
-              image: comment.user.avatar.mediumAvatarUrl,
+              image: comment.user!.avatar!.mediumAvatarUrl!,
               fit: BoxFit.cover,
               width: 38.0,
             ),
@@ -569,7 +566,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                comment.user.name,
+                comment.user!.name!,
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.black87,
@@ -622,7 +619,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
     );
   }
 
-  Container _createCommentTitle(List<Comments> comments) {
+  Container _createCommentTitle(List<Comments>? comments) {
     return Container(
       padding: EdgeInsets.all(10),
       alignment: Alignment.centerLeft,
@@ -630,7 +627,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
         key: commentKey,
         children: [
           Text(
-            comments.isNotEmpty ? comments.length.toString() : '0',
+            (comments?.isNotEmpty??false) ? comments!.length.toString() : '0',
             style: TextStyle(
               fontSize: 16,
               color: Colors.black87,
@@ -655,7 +652,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
     );
   }
 
-  Container _createRestImage(List<Post> restPosts) {
+  Container _createRestImage(List<Post>? restPosts) {
     return Container(
       height: 146,
       child: ScrollConfiguration(
@@ -666,7 +663,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
             return Padding(padding: EdgeInsets.only(right: 10));
           },
           padding: EdgeInsets.all(10),
-          itemCount: restPosts.length,
+          itemCount: restPosts?.length??0,
           itemBuilder: (BuildContext context, int index) {
             return AspectRatio(
               aspectRatio: 3 / 2,
@@ -674,9 +671,9 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
                 onTap: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context) => PostsPageDetails(
-                            postId: restPosts[index].id,
-                            userId: restPosts[index].user.id,
-                          )));
+                        postId: restPosts![index].id,
+                        userId: restPosts[index].user!.id,
+                      )));
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -691,7 +688,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(14),
                     child: CacheImage(
-                      url: restPosts[index].coverImage.mediumImageUrl,
+                      url: restPosts![index].coverImage!.mediumImageUrl,
                     ),
                   ),
                 ),
@@ -720,7 +717,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
     );
   }
 
-  Widget _createBottomBar(Size size, Post post) {
+  Widget _createBottomBar(Size size, Post? post) {
     return AnimatedPositioned(
       duration: Duration(milliseconds: 360),
       bottom: isShowBottomInputBar ? -36 : 20,
@@ -746,7 +743,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
     );
   }
 
-  Widget createBottomBarLikedButton(Post post) {
+  Widget createBottomBarLikedButton(Post? post) {
     final user = SpUtil.getObject('User');
     var isLogin = user != null ? true : false;
     return Container(
@@ -773,9 +770,9 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
         ),
         clickCallback: () async {
           await context
-              .read(postsDetailsProvider(
-                  DetailsParams(userId: widget.userId, postId: widget.postId)))
-              .clickLike(post.id);
+              .read(postsDetailsProvider!(
+              DetailsParams(userId: widget.userId!, postId: widget.postId!)))
+              .clickLike(post?.id);
         },
       ),
     );
@@ -837,49 +834,49 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
     );
   }
 
-  Widget _createImage(Post post) {
+  Widget _createImage(Post? post) {
     var lists = post?.files?.reversed?.toList();
-    return post.files.length > 1
+    return (post?.files?.length??0) > 1
         ? Column(
-            children: lists?.map((file) {
-              if (post?.files?.first == file) {
-                return ClipRRect(
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(36)),
-                  child: Container(
-                    child: ImagePaper(
-                      index: lists?.indexOf(file),
-                      post: post,
-                      knowImageSize: false,
-                    ),
-                  ),
-                );
-              } else if (post?.files?.last == file) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(36)),
-                  child: Container(
-                    child: ImagePaper(
-                      index: lists?.indexOf(file),
-                      post: post,
-                      knowImageSize: false,
-                    ),
-                  ),
-                );
-              } else {
-                return Container(
-                  child: ImagePaper(
-                    index: lists?.indexOf(file),
-                    post: post,
-                    knowImageSize: false,
-                  ),
-                );
-              }
-            })?.toList(),
-          )
+      children: lists?.map((file) {
+        if (post?.files?.first == file) {
+          return ClipRRect(
+            borderRadius:
+            BorderRadius.vertical(bottom: Radius.circular(36)),
+            child: Container(
+              child: ImagePaper(
+                index: lists?.indexOf(file),
+                post: post,
+                knowImageSize: false,
+              ),
+            ),
+          );
+        } else if (post?.files?.last == file) {
+          return ClipRRect(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(36)),
+            child: Container(
+              child: ImagePaper(
+                index: lists?.indexOf(file),
+                post: post,
+                knowImageSize: false,
+              ),
+            ),
+          );
+        } else {
+          return Container(
+            child: ImagePaper(
+              index: lists?.indexOf(file),
+              post: post,
+              knowImageSize: false,
+            ),
+          );
+        }
+      })?.toList()??[],
+    )
         : Container();
   }
 
-  Container _createText(Post post) {
+  Container _createText(Post? post) {
     return Container(
       padding: EdgeInsets.only(right: 16, left: 16),
       child: Column(
@@ -892,14 +889,14 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
                 ClipOval(
                   child: FadeInImage.memoryNetwork(
                     placeholder: kTransparentImage,
-                    image: post?.user?.avatar?.mediumAvatarUrl,
+                    image: post?.user?.avatar?.mediumAvatarUrl??"",
                     fit: BoxFit.cover,
                     width: 56.0,
                   ),
                 ),
                 Padding(padding: EdgeInsets.only(top: 6)),
                 Text(
-                  post?.user?.name,
+                  post?.user?.name??"",
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.black54,
@@ -912,7 +909,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
                 ),
                 Padding(padding: EdgeInsets.only(top: 6)),
                 Text(
-                  post?.title,
+                  post?.title??"",
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.black87,
@@ -927,7 +924,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
                 Container(
                   padding: EdgeInsets.only(top: 16, bottom: 26),
                   child: Text(
-                    post?.content,
+                    post?.content??"",
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.black54,
@@ -945,7 +942,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
     );
   }
 
-  Widget _createBackdropFilter(num imageHeight, Post post, Size size) {
+  Widget _createBackdropFilter(num imageHeight, Post? post, Size size) {
     return Positioned(
       left: 0,
       right: 0,
@@ -984,7 +981,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
     );
   }
 
-  Container _createCoverImage(Post post) {
+  Container _createCoverImage(Post? post) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(bottomRight: Radius.circular(32)),
@@ -994,7 +991,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
           CacheImage(
               url: post?.coverImage != null
                   ? post?.coverImage?.mediumImageUrl
-                  : post?.files[0]?.mediumImageUrl),
+                  : post?.files![0]?.mediumImageUrl),
           Container(
             height: 166,
             decoration: BoxDecoration(
@@ -1014,14 +1011,14 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
     );
   }
 
-  Positioned _createAppBar(Size size, BuildContext context, Post post) {
+  Positioned _createAppBar(Size size, BuildContext context, Post? post) {
     /// 设置按钮的颜色从白色到黑色变化
     final whiteToBlack = Color.fromARGB(255, ((1 - appBarAlpha) * 255).toInt(),
         ((1 - appBarAlpha) * 255).toInt(), ((1 - appBarAlpha) * 255).toInt());
 
     /// 设置背景色白色到透明
     final whiteToOpacity =
-        Color.fromARGB((appBarAlpha * 255).toInt(), 255, 255, 255);
+    Color.fromARGB((appBarAlpha * 255).toInt(), 255, 255, 255);
 
     /// 设置状态栏颜色
     if (!isShowBottomBar) {
@@ -1032,17 +1029,17 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
     return Positioned(
       top: 0,
       child: Container(
-        padding: EdgeInsets.only(top: ScreenUtil.instance.statusBarHeight),
+        padding: EdgeInsets.only(top: ScreenUtil.instance!.statusBarHeight),
         decoration: BoxDecoration(
           boxShadow: !isShowBottomBar
-              ? [
-                  BoxShadow(
-                    color: Colors.black87.withOpacity(0.1),
-                    blurRadius: 8.0,
-                    spreadRadius: 1,
-                  ),
-                ]
-              : null,
+          ? [
+          BoxShadow(
+            color: Colors.black87.withOpacity(0.1),
+            blurRadius: 8.0,
+            spreadRadius: 1,
+          ),
+          ]
+          : null,
           color: whiteToOpacity,
         ),
         width: size.width,
@@ -1064,14 +1061,14 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
                     ClipOval(
                       child: FadeInImage.memoryNetwork(
                         placeholder: kTransparentImage,
-                        image: post?.user?.avatar?.mediumAvatarUrl,
+                        image: post?.user?.avatar?.mediumAvatarUrl??"",
                         fit: BoxFit.cover,
                         width: 26.0,
                       ),
                     ),
                     Padding(padding: EdgeInsets.only(right: 8)),
                     Text(
-                      post?.user?.name,
+                      post?.user?.name??"",
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.black87,
@@ -1101,8 +1098,8 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
   void _watchScroll() {
     final opacityHeight = imageHeight - 160;
     final opacityValue =
-        160 - (imageHeight - _scrollController.position.pixels);
-    if (_scrollController.position.pixels > opacityHeight) {
+        160 - (imageHeight - _scrollController!.position.pixels);
+    if (_scrollController!.position.pixels > opacityHeight) {
       double alpha = opacityValue / 160;
       if (alpha < 0) {
         alpha = 0;
@@ -1117,7 +1114,7 @@ class _PostsPageDetailsState extends State<PostsPageDetails>
       });
     } else {
       /// 解决滑动过快，alpha 没有到达0
-      if (_scrollController.position.pixels <= opacityHeight &&
+      if (_scrollController!.position.pixels <= opacityHeight &&
           appBarAlpha != 0) {
         appBarAlpha = 0;
         setState(() {});

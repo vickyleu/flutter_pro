@@ -14,8 +14,8 @@ part 'api_client.g.dart';
 
 @RestApi(baseUrl: 'https://api.lishaoy.net')
 abstract class ApiClient {
-  factory ApiClient({Dio dio, String baseUrl}) {
-    dio ??= BaseDio.getInstance().getDio();
+  factory ApiClient({Dio? dio, String? baseUrl}) {
+    dio ??= BaseDio.getInstance()!.getDio();
     return _ApiClient(dio, baseUrl: baseUrl);
   }
 
@@ -28,11 +28,11 @@ abstract class ApiClient {
   /// 获取文章详情
   @GET('/posts/{postId}')
   Future<SinglePostModel> getPostsById(@Path('postId') int postId,
-      {@Query('notView') bool notView});
+      {@Query('notView') bool? notView});
 
   /// 登录
   @POST('/login')
-  Future<LoginModel> login(@Body() Login login);
+  Future<LoginModel> login(@Body() Login? login);
 
   /// 点赞
   @POST('/posts/{postId}/like')
@@ -55,7 +55,7 @@ abstract class ApiClient {
 
   /// 获取文章评论
   @GET('/comments')
-  Future<CommentsPostsModel> getPostsComments(@Query('post') int post);
+  Future<CommentsPostsModel> getPostsComments(@Query('post') int? post);
 
   /// 创建文章评论
   @POST('/comments')

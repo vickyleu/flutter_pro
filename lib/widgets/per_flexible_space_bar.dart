@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// @dart = 2.8
+
 
 import 'dart:math' as math;
 import 'dart:ui' as ui;
@@ -145,7 +145,7 @@ class PerFlexibleSpaceBar extends StatefulWidget {
   ///
   /// Most commonly used in the [AppBar.flexibleSpace] field.
   const PerFlexibleSpaceBar({
-    Key key,
+    Key? key,
     this.title,
     this.background,
     this.centerTitle,
@@ -158,18 +158,18 @@ class PerFlexibleSpaceBar extends StatefulWidget {
   /// The primary contents of the flexible space bar when expanded.
   ///
   /// Typically a [Text] widget.
-  final Widget title;
+  final Widget? title;
 
   /// Shown behind the [title] when expanded.
   ///
   /// Typically an [Image] widget with [Image.fit] set to [BoxFit.cover].
-  final Widget background;
+  final Widget? background;
 
   /// Whether the title should be centered.
   ///
   /// By default this property is true if the current target platform
   /// is [TargetPlatform.iOS] or [TargetPlatform.macOS], false otherwise.
-  final bool centerTitle;
+  final bool? centerTitle;
 
   /// Collapse effect while scrolling.
   ///
@@ -191,7 +191,7 @@ class PerFlexibleSpaceBar extends StatefulWidget {
   /// By default the value of this property is
   /// `EdgeInsetsDirectional.only(start: 72, bottom: 16)` if the title is
   /// not centered, `EdgeInsetsDirectional.only(start: 0, bottom: 16)` otherwise.
-  final EdgeInsetsGeometry titlePadding;
+  final EdgeInsetsGeometry? titlePadding;
 
   /// Wraps a widget that contains an [AppBar] to convey sizing information down
   /// to the [PerFlexibleSpaceBar].
@@ -211,11 +211,11 @@ class PerFlexibleSpaceBar extends StatefulWidget {
   ///  * [PerFlexibleSpaceBarSettings] which creates a settings object that can be
   ///    used to specify these settings to a [FlexibleSpaceBar].
   static Widget createSettings({
-    double toolbarOpacity,
-    double minExtent,
-    double maxExtent,
-    @required double currentExtent,
-    @required Widget child,
+    double? toolbarOpacity,
+    double? minExtent,
+    double? maxExtent,
+    required double currentExtent,
+    required Widget child,
   }) {
     assert(currentExtent != null);
     return PerFlexibleSpaceBarSettings(
@@ -232,7 +232,7 @@ class PerFlexibleSpaceBar extends StatefulWidget {
 }
 
 class _PerFlexibleSpaceBarState extends State<PerFlexibleSpaceBar> {
-  bool _getEffectiveCenterTitle(ThemeData theme) {
+  bool? _getEffectiveCenterTitle(ThemeData theme) {
     if (widget.centerTitle != null)
       return widget.centerTitle;
     assert(theme.platform != null);
@@ -249,7 +249,7 @@ class _PerFlexibleSpaceBarState extends State<PerFlexibleSpaceBar> {
     return null;
   }
 
-  Alignment _getTitleAlignment(bool effectiveCenterTitle) {
+  Alignment? _getTitleAlignment(bool effectiveCenterTitle) {
     if (effectiveCenterTitle)
       return Alignment.bottomCenter;
     final TextDirection textDirection = Directionality.of(context);
@@ -263,7 +263,7 @@ class _PerFlexibleSpaceBarState extends State<PerFlexibleSpaceBar> {
     return null;
   }
 
-  double _getCollapsePadding(double t, PerFlexibleSpaceBarSettings settings) {
+  double? _getCollapsePadding(double t, PerFlexibleSpaceBarSettings settings) {
     switch (widget.collapseMode) {
       case PerCollapseMode.pin:
         return -(settings.maxExtent - settings.currentExtent);
@@ -280,7 +280,7 @@ class _PerFlexibleSpaceBarState extends State<PerFlexibleSpaceBar> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          final PerFlexibleSpaceBarSettings settings = context.dependOnInheritedWidgetOfExactType<PerFlexibleSpaceBarSettings>();
+          final PerFlexibleSpaceBarSettings settings = context.dependOnInheritedWidgetOfExactType<PerFlexibleSpaceBarSettings>()!;
           assert(
           settings != null,
           'A FlexibleSpaceBar must be wrapped in the widget returned by FlexibleSpaceBar.createSettings().',
@@ -295,7 +295,7 @@ class _PerFlexibleSpaceBarState extends State<PerFlexibleSpaceBar> {
 
           // 0.0 -> Expanded
           // 1.0 -> Collapsed to toolbar
-          final double t = (1.0 - (settings.currentExtent - settings.minExtent) / deltaExtent).clamp(0.0, 1.0) as double;
+          final double t = (1.0 - (settings.currentExtent - settings.minExtent) / deltaExtent).clamp(0.0, 1.0);
           print(deltaExtent);
           print(kToolbarHeight);
           // background
@@ -347,7 +347,7 @@ class _PerFlexibleSpaceBarState extends State<PerFlexibleSpaceBar> {
           if (widget.title != null) {
             final ThemeData theme = Theme.of(context);
 
-            Widget title;
+            Widget? title;
             switch (theme.platform) {
               case TargetPlatform.iOS:
               case TargetPlatform.macOS:
@@ -368,7 +368,7 @@ class _PerFlexibleSpaceBarState extends State<PerFlexibleSpaceBar> {
             if (widget.stretchModes.contains(PerStretchMode.fadeTitle) &&
                 constraints.maxHeight > settings.maxExtent) {
               final double stretchOpacity = 1 -
-                  (((constraints.maxHeight - settings.maxExtent) / 100).clamp(0.0, 1.0) as double);
+                  ((constraints.maxHeight - settings.maxExtent) / 100).clamp(0.0, 1.0);
               title = Opacity(
                 opacity: stretchOpacity,
                 child: title,
@@ -377,11 +377,11 @@ class _PerFlexibleSpaceBarState extends State<PerFlexibleSpaceBar> {
 
             final double opacity = settings.toolbarOpacity;
             if (opacity > 0.0) {
-              TextStyle titleStyle = theme.primaryTextTheme.headline6;
+              TextStyle titleStyle = theme.primaryTextTheme.headline6!;
               titleStyle = titleStyle.copyWith(
-                  color: titleStyle.color.withOpacity(opacity)
+                  color: titleStyle.color!.withOpacity(opacity)
               );
-              final bool effectiveCenterTitle = _getEffectiveCenterTitle(theme);
+              final bool effectiveCenterTitle = _getEffectiveCenterTitle(theme)!;
               final EdgeInsetsGeometry padding = widget.titlePadding ??
                   EdgeInsetsDirectional.only(
                     start: effectiveCenterTitle ? 0.0 : 72.0,
@@ -390,7 +390,7 @@ class _PerFlexibleSpaceBarState extends State<PerFlexibleSpaceBar> {
               final double scaleValue = Tween<double>(begin: 1.5, end: 1.0).transform(t);
               final Matrix4 scaleTransform = Matrix4.identity()
                 ..scale(scaleValue, scaleValue, 1.0);
-              final Alignment titleAlignment = _getTitleAlignment(effectiveCenterTitle);
+              final Alignment titleAlignment = _getTitleAlignment(effectiveCenterTitle)!;
               children.add(Container(
                 padding: padding,
                 child: Transform(
@@ -436,12 +436,12 @@ class PerFlexibleSpaceBarSettings extends InheritedWidget {
   /// The required [toolbarOpacity], [minExtent], [maxExtent], [currentExtent],
   /// and [child] parameters must not be null.
   const PerFlexibleSpaceBarSettings({
-    Key key,
-    @required this.toolbarOpacity,
-    @required this.minExtent,
-    @required this.maxExtent,
-    @required this.currentExtent,
-    @required Widget child,
+    Key? key,
+    required this.toolbarOpacity,
+    required this.minExtent,
+    required this.maxExtent,
+    required this.currentExtent,
+    required Widget child,
   }) : assert(toolbarOpacity != null),
         assert(minExtent != null && minExtent >= 0),
         assert(maxExtent != null && maxExtent >= 0),

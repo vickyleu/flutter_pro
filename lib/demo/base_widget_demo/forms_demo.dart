@@ -28,13 +28,13 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State < RegisterForm > {
   final registerFormKey = GlobalKey < FormState > ();
-  String uname,
+  String? uname,
   pwd;
   AutovalidateMode autovalidate = AutovalidateMode.disabled;
 
   void submitRegisterForm() {
-    if (registerFormKey.currentState.validate()) {
-      registerFormKey.currentState.save();
+    if (registerFormKey.currentState!.validate()) {
+      registerFormKey.currentState!.save();
       debugPrint('uname: $uname');
       debugPrint('pwd: $pwd');
 
@@ -51,14 +51,14 @@ class _RegisterFormState extends State < RegisterForm > {
 
   }
 
-  String validatorUname(value) {
+  String? validatorUname(value) {
     if (value.isEmpty) {
       return 'uname is required';
     }
 
     return null;
   }
-  String validatorPwd(value) {
+  String? validatorPwd(value) {
     if (value.isEmpty) {
       return 'pwd is required';
     }

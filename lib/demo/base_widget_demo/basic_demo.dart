@@ -9,7 +9,7 @@ class BasicDemo extends StatelessWidget {
           image: NetworkImage('https://cdn.lishaoy.net/image/36-Days.png'),
           alignment: Alignment.center,
           fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(Colors.yellowAccent[100].withOpacity(0.1), BlendMode.difference)
+          colorFilter: ColorFilter.mode(Colors.yellowAccent[100]!.withOpacity(0.1), BlendMode.difference)
         )
       ),
       // color: Colors.grey[100],

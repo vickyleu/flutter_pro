@@ -14,7 +14,7 @@ class BottomNavigationBarDemo extends StatefulWidget {
 
 class BottomNavigationBarState extends State<BottomNavigationBarDemo> {
   int _currentIndex = 0;
-  Widget getPages() {
+  Widget? getPages() {
     print(_currentIndex);
     switch (_currentIndex) {
       case 0:

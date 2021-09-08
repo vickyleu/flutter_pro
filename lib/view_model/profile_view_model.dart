@@ -11,11 +11,11 @@ import 'package:pro_flutter/models/user_model.dart';
 import 'package:pro_flutter/widgets/page_state.dart';
 
 class ProfileState {
-  final UserModel user;
-  final List<Post> posts;
-  final Rect textSize;
-  final PageState pageState;
-  final BaseError error;
+  final UserModel? user;
+  final List<Post?>? posts;
+  final Rect? textSize;
+  final PageState? pageState;
+  final BaseError? error;
 
   ProfileState({this.user, this.posts, this.textSize, this.pageState, this.error});
 
@@ -27,11 +27,11 @@ class ProfileState {
         error = null;
 
   ProfileState copyWith({
-    UserModel user,
-    List<Post> posts,
-    Rect textSize,
-    PageState pageState,
-    BaseError error,
+    UserModel? user,
+    List<Post?>? posts,
+    Rect? textSize,
+    PageState? pageState,
+    BaseError? error,
   }) {
     return ProfileState(
       user: user ?? this.user,
@@ -44,7 +44,7 @@ class ProfileState {
 }
 
 class ProfileViewModel extends StateNotifier<ProfileState> {
-  ProfileViewModel(int userId, [ProfileState state])
+  ProfileViewModel(int userId, [ProfileState? state])
       : super(state ?? ProfileState.initial()){
     if(userId !=0) getUserInfo(userId);
   }
@@ -73,7 +73,7 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
       if(user.message == 'success' && postModel.message == 'success') {
             state = state.copyWith(
               user: user,
-              posts: [...postModel.data.posts],
+              posts: [...postModel.data!.posts!],
               pageState: PageState.dataFetchState,
             );
           }
@@ -85,7 +85,7 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
       } else {
         state = state.copyWith(
             pageState: PageState.errorState,
-            error: BaseDio.getInstance().getDioError(e));
+            error: BaseDio.getInstance()!.getDioError(e));
       }
     }
   }
@@ -97,12 +97,12 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
     try {
       SinglePostModel postModel =
       await ApiClient().getPostsById(postId, notView: true);
-      state.posts.setRange(index, index + 1, [postModel.data]);
-      state = state.copyWith(posts: [...state.posts]);
+      state.posts!.setRange(index, index + 1, [postModel.data]);
+      state = state.copyWith(posts: [...state.posts!]);
     } catch (e) {
       state = state.copyWith(
           pageState: PageState.errorState,
-          error: BaseDio.getInstance().getDioError(e));
+          error: BaseDio.getInstance()!.getDioError(e));
     }
   }
 }

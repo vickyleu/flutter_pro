@@ -24,7 +24,7 @@ class _PopupMenuButtonDemoState extends State < PopupMenuButtonDemo > {
               children: < Widget > [
                 Text(_currentMenuItem),
                 PopupMenuButton(
-                  onSelected: (value) {
+                  onSelected: (dynamic value) {
                     setState(() {
                       _currentMenuItem = value;
                     });

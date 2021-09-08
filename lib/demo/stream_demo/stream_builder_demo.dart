@@ -33,15 +33,13 @@ class _StreamBuilderDemoState extends State<StreamBuilderDemo> {
           model.dispatch(FetchData());
         },
       ),
-      body: StreamBuilder(
+      body: StreamBuilder<StreamDemoState>(
         stream: model.streamState,
         builder: (buildContext, snapshot) {
           if (snapshot.hasError) {
-            return _getInformationMessage(snapshot.error);
+            return _getInformationMessage(snapshot.error as String);
           }
-
           var streamState = snapshot.data;
-
           if (!snapshot.hasData || streamState is BusyState) {
             return Center(
               child: CircularProgressIndicator(
@@ -50,16 +48,15 @@ class _StreamBuilderDemoState extends State<StreamBuilderDemo> {
               ),
             );
           }
-
           if (streamState is DataFetchedState) {
             if (!streamState.hasData) {
               return _getInformationMessage('not found data');
             }
           }
           return ListView.builder(
-            itemCount: streamState.data.length,
+            itemCount: (streamState as DataFetchedState?)?.data?.length,
             itemBuilder: (buildContext, index) =>
-                _getListItem(index, streamState.data),
+                _getListItem(index, streamState!.data!),
           );
         },
       ),

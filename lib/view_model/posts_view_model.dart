@@ -12,11 +12,11 @@ import 'package:pro_flutter/widgets/page_state.dart';
 
 /// 存储页面状态和数据状态（如，缺省页、错误页、加载中...）
 class PostState {
-  final List<Post> posts;
-  final List<Category> categories;
-  final int pageIndex;
-  final PageState pageState; // 页面状态类
-  final BaseError error; // 根据后端返回的错误的错误类
+  final List<Post?>? posts;
+  final List<Category>? categories;
+  final int? pageIndex;
+  final PageState? pageState; // 页面状态类
+  final BaseError? error; // 根据后端返回的错误的错误类
 
   PostState(
       {this.posts,
@@ -33,11 +33,11 @@ class PostState {
         error = null;
 
   PostState copyWith({
-    List<Post> posts,
-    List<Category> categories,
-    int pageIndex,
-    PageState pageState,
-    BaseError error,
+    List<Post?>? posts,
+    List<Category>? categories,
+    int? pageIndex,
+    PageState? pageState,
+    BaseError? error,
   }) {
     return PostState(
       posts: posts ?? this.posts,
@@ -53,7 +53,7 @@ class PostState {
  * 获取分类tab数据
  */
 class CategoryTabViewModel extends StateNotifier<PostState> {
-  CategoryTabViewModel([PostState state])
+  CategoryTabViewModel([PostState? state])
       : super(state ?? PostState.initial()) {
     getCategory();
   }
@@ -65,12 +65,12 @@ class CategoryTabViewModel extends StateNotifier<PostState> {
     try {
       CategoryModel categoryModel = await ApiClient().getCategory();
       if (categoryModel.message == 'success') {
-        state = state.copyWith(categories: [...categoryModel.data]);
+        state = state.copyWith(categories: [...categoryModel.data!]);
       }
     } catch (e) {
       state = state.copyWith(
           pageState: PageState.errorState,
-          error: BaseDio.getInstance().getDioError(e));
+          error: BaseDio.getInstance()!.getDioError(e));
     }
   }
 }
@@ -80,7 +80,7 @@ class CategoryTabViewModel extends StateNotifier<PostState> {
  * 需要根据需求自定义查询需要的数据。
  */
 class PostsViewModel extends StateNotifier<PostState> {
-  PostsViewModel(int categoryId, [PostState state]) : super(state ?? PostState.initial()) {
+  PostsViewModel(int categoryId, [PostState? state]) : super(state ?? PostState.initial()) {
     getPosts(categoryId);
   }
 
@@ -105,7 +105,7 @@ class PostsViewModel extends StateNotifier<PostState> {
     } catch (e) {
       state = state.copyWith(
           pageState: PageState.errorState,
-          error: BaseDio.getInstance().getDioError(e));
+          error: BaseDio.getInstance()!.getDioError(e));
     }
   }
 
@@ -116,12 +116,12 @@ class PostsViewModel extends StateNotifier<PostState> {
     try {
       SinglePostModel postModel =
           await ApiClient().getPostsById(postId, notView: true);
-      state.posts.setRange(index, index + 1, [postModel.data]);
-      state = state.copyWith(posts: [...state.posts]);
+      state.posts!.setRange(index, index + 1, [postModel.data]);
+      state = state.copyWith(posts: [...state.posts!]);
     } catch (e) {
       state = state.copyWith(
           pageState: PageState.errorState,
-          error: BaseDio.getInstance().getDioError(e));
+          error: BaseDio.getInstance()!.getDioError(e));
     }
   }
 
@@ -144,12 +144,12 @@ class PostsViewModel extends StateNotifier<PostState> {
           postModel =
               await ApiClient().getPostsByCategoryId('1', '10', categoryId);
         }
-        if (postModel.data.posts.isEmpty && state.pageIndex == 1) {
+        if (postModel.data!.posts!.isEmpty && state.pageIndex == 1) {
           state = state.copyWith(pageState: PageState.emptyDataState);
         } else {
           initPostState();
           state = state.copyWith(
-            posts: [...postModel.data.posts],
+            posts: [...postModel.data!.posts!],
             pageState: PageState.refreshState,
             pageIndex: 2,
           );
@@ -166,15 +166,15 @@ class PostsViewModel extends StateNotifier<PostState> {
           postModel = await ApiClient().getPostsByCategoryId(
               state.pageIndex.toString(), '10', categoryId);
         }
-        if (postModel.data.posts.isEmpty && state.pageIndex == 1) {
+        if (postModel.data!.posts!.isEmpty && state.pageIndex == 1) {
           state = state.copyWith(pageState: PageState.emptyDataState);
         } else {
           state = state.copyWith(
-              posts: [...state.posts, ...postModel.data.posts],
-              pageIndex: state.pageIndex + 1,
+              posts: [...state.posts!, ...postModel.data!.posts!],
+              pageIndex: state.pageIndex! + 1,
               pageState: PageState.dataFetchState);
-          if (postModel.data.posts.isEmpty ||
-              postModel.data.posts.length < 10) {
+          if (postModel.data!.posts!.isEmpty ||
+              postModel.data!.posts!.length < 10) {
             state = state.copyWith(pageState: PageState.noMoreDataState);
           }
         }
@@ -182,7 +182,7 @@ class PostsViewModel extends StateNotifier<PostState> {
     } catch (e) {
       state = state.copyWith(
           pageState: PageState.errorState,
-          error: BaseDio.getInstance().getDioError(e));
+          error: BaseDio.getInstance()!.getDioError(e));
     }
   }
 }

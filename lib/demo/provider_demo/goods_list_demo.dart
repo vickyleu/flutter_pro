@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pro_flutter/demo/model/goods_list_model.dart';
-import 'package:toast/toast.dart';
 
 final goodsListProvider = ChangeNotifierProvider((ref) => GoodsListModel());
 
 class GoodsListDemo extends StatelessWidget {
-  final String title;
+  final String? title;
 
   GoodsListDemo({this.title});
 
@@ -18,7 +18,7 @@ class GoodsListDemo extends StatelessWidget {
   Widget goodsList(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(title!),
       ),
       body: Consumer(builder: (context, wacth, _) {
         final provider = wacth(goodsListProvider);
@@ -31,9 +31,8 @@ class GoodsListDemo extends StatelessWidget {
               trailing: GestureDetector(
                 onTap: () {
                   provider.collect(index);
-                  Toast.show(
+                  Fluttertoast.showToast(msg:
                     'No.${index + 1} rebuild',
-                    context,
                     backgroundColor: Colors.yellow,
                     textColor: Colors.black87,
                   );
@@ -45,7 +44,7 @@ class GoodsListDemo extends StatelessWidget {
             );
           },
         );
-      }),
+      } as Widget Function(BuildContext, T Function<T>(ProviderBase<Object?, T>), Widget?)),
     );
   }
 }

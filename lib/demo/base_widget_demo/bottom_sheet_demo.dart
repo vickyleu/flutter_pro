@@ -11,7 +11,7 @@ class _BottomSheetDemoState extends State<BottomSheetDemo> {
   String _choice = 'Nothing';
 
   void _openBottomSheet() {
-    _bottomSheetDemoState.currentState
+    _bottomSheetDemoState.currentState!
         .showBottomSheet((BuildContext context) => BottomAppBar(
               child: Container(
                 height: 100.0,

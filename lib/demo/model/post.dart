@@ -9,11 +9,11 @@ class Post {
     this.liked = liked;
   }
 
-  final String title;
-  final String author;
-  final String imageUrl;
-  final String description;
-  bool liked;
+  final String? title;
+  final String? author;
+  final String? imageUrl;
+  final String? description;
+  bool? liked;
 }
 
 final List<Post> posts = [

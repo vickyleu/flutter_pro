@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pro_flutter/demo/flare_demo/flare_sign_in_demo.dart';
@@ -9,12 +11,12 @@ import 'package:pro_flutter/widgets/page_state.dart';
 
 class CommonBasePage extends StatelessWidget {
 
-  final PageState pageState;
-  final BaseError baseError;
-  final VoidCallback buttonActionCallback;
-  final Widget child;
+  final PageState? pageState;
+  final BaseError? baseError;
+  final VoidCallback? buttonActionCallback;
+  final Widget? child;
 
-  const CommonBasePage({Key key, this.pageState, this.baseError, this.buttonActionCallback, this.child}) : super(key: key);
+  const CommonBasePage({Key? key, this.pageState, this.baseError, this.buttonActionCallback, this.child}) : super(key: key);
 
 
   @override
@@ -37,7 +39,7 @@ class CommonBasePage extends StatelessWidget {
         isEmptyPage: true,
         icon: Lottie.asset(
           'assets/json/empty3.json',
-          width: ScreenUtil.instance.width / 1.8,
+          width: ScreenUtil.instance!.width / 1.8,
           height: 220,
           fit: BoxFit.contain,
           alignment: Alignment.center,
@@ -51,23 +53,23 @@ class CommonBasePage extends StatelessWidget {
       return ErrorPage(
         title: baseError is NeedLogin
             ? '😮 你竟然忘记登录 😮'
-            : baseError.code?.toString(),
-        desc: baseError.message,
+            : baseError!.code?.toString(),
+        desc: baseError!.message,
         buttonAction: () async {
           if (baseError is NeedLogin) {
-            LoginState loginState = await Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => FlareSignInDemo()));
-            if (loginState.isLogin) {
-              buttonActionCallback();
+            LoginState loginState = await (Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => FlareSignInDemo())) as FutureOr<LoginState>);
+            if (loginState.isLogin!) {
+              buttonActionCallback!();
             }
           } else {
-            buttonActionCallback();
+            buttonActionCallback!();
           }
         },
         buttonText: baseError is NeedLogin ? '登录' : null,
       );
     }
 
-    return child;
+    return child!;
   }
 }

@@ -1,6 +1,6 @@
 abstract class BaseError {
-  final int code;
-  final String message;
+  final int? code;
+  final String? message;
 
   BaseError({this.code, this.message});
 }
@@ -55,15 +55,15 @@ class PwdEmpty implements BaseError {
 
 class OtherError implements BaseError {
 
-  final int statusCode;
-  final String statusMessage;
+  final int? statusCode;
+  final String? statusMessage;
 
   OtherError({this.statusCode, this.statusMessage});
 
   @override
-  int get code => statusCode;
+  int? get code => statusCode;
 
   @override
-  String get message => statusMessage;
+  String? get message => statusMessage;
 
 }

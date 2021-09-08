@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class SigninButton extends StatelessWidget {
   final Widget child;
-  final Gradient gradient;
+  final Gradient? gradient;
   final double width;
   final double height;
-  final Function onPressed;
+  final Function? onPressed;
 
   const SigninButton({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
     this.gradient,
     this.width = double.infinity,
     this.height = 50.0,
@@ -32,7 +32,7 @@ class SigninButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-            onTap: onPressed,
+            onTap: onPressed as void Function()?,
             child: Center(
               child: child,
             )),

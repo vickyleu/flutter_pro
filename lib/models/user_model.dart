@@ -3,18 +3,18 @@
 /// message : "success"
 
 class UserModel {
-  int _code;
-  Data _data;
-  String _message;
+  int? _code;
+  Data? _data;
+  String? _message;
 
-  int get code => _code;
-  Data get data => _data;
-  String get message => _message;
+  int? get code => _code;
+  Data? get data => _data;
+  String? get message => _message;
 
   UserModel({
-      int code, 
-      Data data, 
-      String message}){
+      int? code, 
+      Data? data, 
+      String? message}){
     _code = code;
     _data = data;
     _message = message;
@@ -30,7 +30,7 @@ class UserModel {
     var map = <String, dynamic>{};
     map["code"] = _code;
     if (_data != null) {
-      map["data"] = _data.toJson();
+      map["data"] = _data!.toJson();
     }
     map["message"] = _message;
     return map;
@@ -45,24 +45,24 @@ class UserModel {
 /// avatar : {"largeAvatarUrl":"https://api.lishaoy.net/avatar/2?size=large","smallAvatarUrl":"https://api.lishaoy.net/avatar/2?size=small","mediumAvatarUrl":"https://api.lishaoy.net/avatar/2?size=medium"}
 
 class Data {
-  int _id;
-  String _name;
-  int _totalPosts;
-  int _totalLikes;
-  Avatar _avatar;
+  int? _id;
+  String? _name;
+  int? _totalPosts;
+  int? _totalLikes;
+  Avatar? _avatar;
 
-  int get id => _id;
-  String get name => _name;
-  int get totalPosts => _totalPosts;
-  int get totalLikes => _totalLikes;
-  Avatar get avatar => _avatar;
+  int? get id => _id;
+  String? get name => _name;
+  int? get totalPosts => _totalPosts;
+  int? get totalLikes => _totalLikes;
+  Avatar? get avatar => _avatar;
 
   Data({
-      int id, 
-      String name, 
-      int totalPosts, 
-      int totalLikes, 
-      Avatar avatar}){
+      int? id, 
+      String? name, 
+      int? totalPosts, 
+      int? totalLikes, 
+      Avatar? avatar}){
     _id = id;
     _name = name;
     _totalPosts = totalPosts;
@@ -85,7 +85,7 @@ class Data {
     map["totalPosts"] = _totalPosts;
     map["totalLikes"] = _totalLikes;
     if (_avatar != null) {
-      map["avatar"] = _avatar.toJson();
+      map["avatar"] = _avatar!.toJson();
     }
     return map;
   }
@@ -97,18 +97,18 @@ class Data {
 /// mediumAvatarUrl : "https://api.lishaoy.net/avatar/2?size=medium"
 
 class Avatar {
-  String _largeAvatarUrl;
-  String _smallAvatarUrl;
-  String _mediumAvatarUrl;
+  String? _largeAvatarUrl;
+  String? _smallAvatarUrl;
+  String? _mediumAvatarUrl;
 
-  String get largeAvatarUrl => _largeAvatarUrl;
-  String get smallAvatarUrl => _smallAvatarUrl;
-  String get mediumAvatarUrl => _mediumAvatarUrl;
+  String? get largeAvatarUrl => _largeAvatarUrl;
+  String? get smallAvatarUrl => _smallAvatarUrl;
+  String? get mediumAvatarUrl => _mediumAvatarUrl;
 
   Avatar({
-      String largeAvatarUrl, 
-      String smallAvatarUrl, 
-      String mediumAvatarUrl}){
+      String? largeAvatarUrl, 
+      String? smallAvatarUrl, 
+      String? mediumAvatarUrl}){
     _largeAvatarUrl = largeAvatarUrl;
     _smallAvatarUrl = smallAvatarUrl;
     _mediumAvatarUrl = mediumAvatarUrl;

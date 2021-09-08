@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -18,13 +19,13 @@ import 'package:pro_flutter/widgets/page_state.dart';
 import 'package:sp_util/sp_util.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-final profileProvider =
+final StateNotifierProviderFamily<ProfileViewModel, dynamic, int>? profileProvider =
     StateNotifierProvider.family<ProfileViewModel,dynamic,int>((ref, userId) {
   return ProfileViewModel(userId);
 });
 
 class ProfilePage extends StatefulWidget {
-  final int userId;
+  final int? userId;
   final bool isCreatePage;
 
   ProfilePage({this.userId, this.isCreatePage = false});
@@ -35,21 +36,21 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final GlobalKey textKey = GlobalKey();
-  Rect textSize;
+  Rect? textSize;
 
   @override
   Widget build(BuildContext context) {
-    var _userId;
+    var _userId=0;
     if (widget.userId != null) {
-      _userId = widget.userId;
+      _userId = widget.userId!;
     } else {
       if(SpUtil.getObject('User') != null)
-      _userId = SpUtil.getObject('User')['id'];
+      _userId = SpUtil.getObject('User')!['id'];
     }
     return Scaffold(
       backgroundColor: Color.fromRGBO(249, 249, 249, 1),
       body: Consumer(builder: (context, watch, _) {
-        final profileState = watch(profileProvider(_userId).notifier).state;
+        final ProfileState profileState = watch(profileProvider!(_userId).notifier).state;
         textSize = profileState.textSize;
         if (profileState.pageState == PageState.busyState ||
             profileState.pageState == PageState.initializedState) {
@@ -67,17 +68,17 @@ class _ProfilePageState extends State<ProfilePage> {
           return ErrorPage(
             title: profileState.error is NeedLogin
                 ? '😮 你竟然忘记登录 😮'
-                : profileState.error.code?.toString(),
-            desc: profileState.error.message,
+                : profileState.error!.code?.toString(),
+            desc: profileState.error!.message,
             buttonAction: () async {
               if (profileState.error is NeedLogin) {
-                LoginState loginState = await Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => FlareSignInDemo()));
-                if (loginState.isLogin) {
+                LoginState loginState = await (Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => FlareSignInDemo())) as FutureOr<LoginState>);
+                if (loginState.isLogin!) {
                   setState(() {});
                 }
               } else {
-                context.refresh(profileProvider(_userId));
+                context.refresh(profileProvider!(_userId));
               }
             },
             buttonText: profileState.error is NeedLogin ? '登录' : null,
@@ -99,7 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ];
           },
           body: Builder(builder: (BuildContext context) {
-            final posts = profileState.posts;
+            final posts = profileState.posts!;
             return CustomScrollView(
               slivers: <Widget>[
                 SliverOverlapInjector(
@@ -126,27 +127,27 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  GestureDetector _createListItem(BuildContext context, List<Post> posts,
+  GestureDetector _createListItem(BuildContext context, List<Post?> posts,
       int index, _userId) {
     return GestureDetector(
       onTap: () {
         Navigator.of(context)
             .push(MaterialPageRoute(
                 builder: (context) => PostsPageDetails(
-                      postId: posts[index].id,
-                      userId: posts[index].user.id,
+                      postId: posts[index]!.id,
+                      userId: posts[index]!.user!.id,
                     )))
             .then((value) {
           context
-              .read(profileProvider(_userId))
-              .updatePostById(posts[index].id, index);
+              .read(profileProvider!(_userId))
+              .updatePostById(posts[index]!.id, index);
         });
       },
       child: Column(
         children: [
           Container(
             padding: EdgeInsets.only(bottom: 6),
-            width: ScreenUtil.instance.width - 32,
+            width: ScreenUtil.instance!.width - 32,
             child: AspectRatio(
               aspectRatio: 3 / 2,
               child: ClipRRect(
@@ -160,7 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Container(
             padding: EdgeInsets.only(bottom: 3),
             child: Text(
-              posts[index]?.title,
+              posts[index]?.title??"",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -175,7 +176,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Row(
               children: [
                 Text(
-                  posts[index]?.category,
+                  posts[index]?.category??"",
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey.withOpacity(0.6),
@@ -188,19 +189,19 @@ class _ProfilePageState extends State<ProfilePage> {
                   posts,
                   index,
                   Icons.remove_red_eye,
-                  posts[index]?.views?.toString(),
+                  posts[index]?.views?.toString()??"",
                 ),
                 _createIconText(
                   posts,
                   index,
                   Icons.favorite,
-                  posts[index]?.totalLikes.toString(),
+                  posts[index]?.totalLikes.toString()??"",
                 ),
                 _createIconText(
                   posts,
                   index,
                   Icons.mode_comment_rounded,
-                  posts[index]?.totalComments.toString(),
+                  posts[index]?.totalComments.toString()??"",
                 ),
               ],
             ),
@@ -211,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _createIconText(
-      List<Post> posts, int index, IconData icon, String num) {
+      List<Post?> posts, int index, IconData icon, String num) {
     return Padding(
       padding: EdgeInsets.only(right: 4),
       child: Row(

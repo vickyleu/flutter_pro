@@ -3,28 +3,27 @@ import 'dart:ui';
 
 import 'package:flare_flutter/flare.dart';
 import 'package:flare_flutter/flare_controls.dart';
-import 'package:flare_dart/math/mat2d.dart';
-import 'package:flare_dart/math/vec2d.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pro_flutter/demo/flare_demo/flare_sign_in_demo.dart';
+import 'package:pro_flutter/view_model/login_view_model.dart';
 
 class FlareSignInController extends FlareControls {
-  ActorNode _faceControl;
+  ActorNode? _faceControl;
   Mat2D _globalToFlareWorld = Mat2D();
   Vec2D _caretGlobal = Vec2D();
   Vec2D _caretWorld = Vec2D();
   Vec2D _faceOrigin = Vec2D();
   Vec2D _faceOriginLocal = Vec2D();
   bool _hasFocus = false;
-  String _password;
-  String _name;
+  String? _password;
+  String? _name;
   static const double _projectGaze = 60.0;
 
   @override
   bool advance(FlutterActorArtboard artboard, double elapsed) {
     super.advance(artboard, elapsed);
-    Vec2D targetTranslation;
+    late Vec2D targetTranslation;
     if (_hasFocus) {
       Vec2D.transformMat2(_caretWorld, _caretGlobal, _globalToFlareWorld);
       _caretWorld[1] +=
@@ -35,7 +34,7 @@ class FlareSignInController extends FlareControls {
       Vec2D.scale(toCaret, toCaret, _projectGaze);
 
       Mat2D toFaceTransform = Mat2D();
-      if (Mat2D.invert(toFaceTransform, _faceControl.parent.worldTransform)) {
+      if (Mat2D.invert(toFaceTransform, _faceControl!.parent!.worldTransform)) {
         Vec2D.transformMat2(toCaret, toCaret, toFaceTransform);
         targetTranslation = Vec2D.add(Vec2D(), toCaret, _faceOriginLocal);
       }
@@ -44,11 +43,11 @@ class FlareSignInController extends FlareControls {
     }
 
     Vec2D diff =
-        Vec2D.subtract(Vec2D(), targetTranslation, _faceControl.translation);
-    Vec2D frameTranslation = Vec2D.add(Vec2D(), _faceControl.translation,
+        Vec2D.subtract(Vec2D(), targetTranslation, _faceControl!.translation);
+    Vec2D frameTranslation = Vec2D.add(Vec2D(), _faceControl!.translation,
         Vec2D.scale(diff, diff, min(1.0, elapsed * 5.0)));
 
-    _faceControl.translation = frameTranslation;
+    _faceControl!.translation = frameTranslation;
 
     return true;
   }
@@ -58,8 +57,8 @@ class FlareSignInController extends FlareControls {
     super.initialize(artboard);
     _faceControl = artboard.getNode("ctrl_face");
     if (_faceControl != null) {
-      _faceControl.getWorldTranslation(_faceOrigin);
-      Vec2D.copy(_faceOriginLocal, _faceControl.translation);
+      _faceControl!.getWorldTranslation(_faceOrigin);
+      Vec2D.copy(_faceOriginLocal, _faceControl!.translation);
     }
     play("idle");
   }
@@ -74,7 +73,7 @@ class FlareSignInController extends FlareControls {
     Mat2D.invert(_globalToFlareWorld, viewTransform);
   }
 
-  void lookAt(Offset caret) {
+  void lookAt(Offset? caret) {
     if (caret == null) {
       _hasFocus = false;
       return;
@@ -107,9 +106,9 @@ class FlareSignInController extends FlareControls {
   }
 
   void submitPassword(BuildContext context) async {
-    await context.read(loginProvider).login(_name, _password);
-    final loginState = context.read(loginProvider.notifier).state;
-    if (loginState.isLogin) {
+    await context.read(loginProvider!).login(_name, _password);
+    final LoginState loginState = context.read(loginProvider!.notifier).state;
+    if (loginState.isLogin!) {
       play("success");
       Navigator.pop(context, loginState);
     } else {

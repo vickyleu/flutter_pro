@@ -19,7 +19,7 @@ class CounterPage extends StatelessWidget {
             style: TextStyle(fontSize: 26.0),
           ),
         );
-      }),
+      } as Widget Function(BuildContext, T Function<T>(ProviderBase<Object?, T>), Widget?)),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.read(counterProvider).state++,
         child: Icon(

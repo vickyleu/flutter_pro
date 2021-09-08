@@ -6,7 +6,7 @@ class BaseStatefulDemo extends StatefulWidget {
 }
 
 class _BaseStatefulDemoState extends State<BaseStatefulDemo> {
-  List<String> _pageData;
+  List<String>? _pageData;
 
   bool get _fetchingData => _pageData == null;
 
@@ -39,7 +39,7 @@ class _BaseStatefulDemoState extends State<BaseStatefulDemo> {
               ),
             )
           : ListView.builder(
-              itemCount: _pageData.length,
+              itemCount: _pageData!.length,
               itemBuilder: (buildContext, index) {
                 return getListDataUi(index);
               },
@@ -51,7 +51,7 @@ class _BaseStatefulDemoState extends State<BaseStatefulDemo> {
     return Column(
                 children: <Widget>[
                   ListTile(
-                    title: Text(_pageData[index]),
+                    title: Text(_pageData![index]),
                   ),
                   Divider(),
                 ],
@@ -67,7 +67,7 @@ class _BaseStatefulDemoState extends State<BaseStatefulDemo> {
     }
 
     if (!hasData) {
-      return List<String>();
+      return <String>[];
     }
 
     return List<String>.generate(10, (index) => '$index content');

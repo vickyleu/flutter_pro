@@ -7,7 +7,7 @@ class DataTableDemo extends StatefulWidget {
 }
 
 class _DataTableDemoState extends State<DataTableDemo> {
-  int _sortColumnIndex;
+  int? _sortColumnIndex;
   bool _sortAscending = true;
 
   @override
@@ -39,7 +39,7 @@ class _DataTableDemoState extends State<DataTableDemo> {
                           b = c;
                         }
 
-                        return a.title.length.compareTo(b.title.length);
+                        return a.title!.length.compareTo(b.title!.length);
                       });
                     });
                   },
@@ -53,16 +53,16 @@ class _DataTableDemoState extends State<DataTableDemo> {
               ],
               rows: posts
                   .map((post) => DataRow(
-                          selected: post.liked,
-                          onSelectChanged: (bool value) {
+                          selected: post.liked!,
+                          onSelectChanged: (bool? value) {
                             setState(() {
                               post.liked = value;
                             });
                           },
                           cells: [
-                            DataCell(Text(post.title)),
-                            DataCell(Text(post.author)),
-                            DataCell(Image.network(post.imageUrl)),
+                            DataCell(Text(post.title!)),
+                            DataCell(Text(post.author!)),
+                            DataCell(Image.network(post.imageUrl!)),
                           ]))
                   .toList(),
             ),

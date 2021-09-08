@@ -6,7 +6,7 @@ class PostShow extends StatelessWidget {
 
   PostShow({
     //@required为必传的参数，没有这个注解的为选传
-    @required this.post,
+    required this.post,
   });
 
   @override
@@ -19,7 +19,7 @@ class PostShow extends StatelessWidget {
       body: Column(
         children: <Widget>[
           Image.network(
-            post.imageUrl,
+            post.imageUrl!,
             fit: BoxFit.cover,
           ),
           Container(

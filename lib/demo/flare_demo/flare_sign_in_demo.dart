@@ -7,7 +7,7 @@ import 'package:pro_flutter/demo/flare_demo/tracking_text_input.dart';
 import 'package:pro_flutter/http/base_error.dart';
 import 'package:pro_flutter/view_model/login_view_model.dart';
 
-final loginProvider = StateNotifierProvider.autoDispose((ref) => LoginViewModel());
+final AutoDisposeStateNotifierProvider<LoginViewModel, dynamic>? loginProvider = StateNotifierProvider.autoDispose((ref) => LoginViewModel());
 
 class FlareSignInDemo extends StatefulWidget {
   @override
@@ -15,7 +15,7 @@ class FlareSignInDemo extends StatefulWidget {
 }
 
 class _FlareSignInDemoState extends State<FlareSignInDemo> {
-  FlareSignInController _signInController;
+  FlareSignInController? _signInController;
   bool isEmptyUser = false;
   bool isEmptyPwd = false;
 
@@ -34,8 +34,8 @@ class _FlareSignInDemoState extends State<FlareSignInDemo> {
         ),
         child: Consumer(
           builder: (context, watch, _) {
-            final loginModel = watch(loginProvider);
-            final loginState = watch(loginProvider.notifier).state;
+            final loginModel = watch(loginProvider!.notifier).state;
+            final LoginState loginState = watch(loginProvider!.notifier).state;
             return Container(
               child: Stack(
                 children: <Widget>[
@@ -90,15 +90,15 @@ class _FlareSignInDemoState extends State<FlareSignInDemo> {
                                     TrackingTextInput(
                                       label: 'Email',
                                       hint: 'email address',
-                                      onCaretMoved: (Offset caret) {
-                                        _signInController.lookAt(caret);
+                                      onCaretMoved: (Offset? caret) {
+                                        _signInController!.lookAt(caret);
                                       },
                                       onTextChanged: (String value) {
-                                        _signInController.setName(value);
+                                        _signInController!.setName(value);
                                       },
                                       autovalidateMode: loginState.error is UserNotExist || loginState.error is UserNameEmpty ? AutovalidateMode.always : AutovalidateMode.disabled,
                                       validator: (value) {
-                                        if(value.isEmpty) {
+                                        if(value?.isEmpty??true) {
                                           return 'Email 不能为空';
                                         } else if (loginState.error is UserNotExist) {
                                           return loginState.error?.message;
@@ -110,16 +110,16 @@ class _FlareSignInDemoState extends State<FlareSignInDemo> {
                                       label: 'Password',
                                       hint: 'Try bears',
                                       isObscured: true,
-                                      onCaretMoved: (Offset caret) {
-                                        _signInController.coverEyes(caret != null);
-                                        _signInController.lookAt(null);
+                                      onCaretMoved: (Offset? caret) {
+                                        _signInController!.coverEyes(caret != null);
+                                        _signInController!.lookAt(null);
                                       },
                                       onTextChanged: (String value) {
-                                        _signInController.setPassword(value);
+                                        _signInController!.setPassword(value);
                                       },
                                       autovalidateMode: loginState.error is PwdNotMatch || loginState.error is PwdEmpty ? AutovalidateMode.always : AutovalidateMode.disabled,
                                       validator: (value) {
-                                        if(value.isEmpty) {
+                                        if(value?.isEmpty??true) {
                                           return '密码不能为空';
                                         } else if (loginState.error is PwdNotMatch) {
                                           return loginState.error?.message;
@@ -135,7 +135,7 @@ class _FlareSignInDemoState extends State<FlareSignInDemo> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       onPressed: () =>
-                                          _signInController.submitPassword(context),
+                                          _signInController!.submitPassword(context),
                                     ),
                                   ],
                                 ),

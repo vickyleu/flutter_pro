@@ -4,7 +4,7 @@ description: A new Flutter project.
 version: 1.0.2
 
 environment:
-  sdk: ">=2.10.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -14,9 +14,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.3
   flutter_riverpod: ^0.14.0+3
-  toast: any
-  flare_flutter: ^2.0.6
-  smart_flare: ^0.2.9+1
+  fluttertoast: ^8.0.8
+  flare_flutter: ^3.0.2
+  smart_flare: #^0.2.9+1
+    git:
+      url: "https://github.com/vickyleu/smart_flare.git"
+      ref: "master"
   retrofit: ^2.0.1
   logger: ^1.1.0
   dio: ^4.0.0
@@ -24,7 +27,7 @@ dependencies:
   json_annotation: ^4.0.1
   equatable: ^2.0.3
   shared_preferences: ^2.0.7
-  freezed_annotation: "0.14.0"
+  freezed_annotation: ^0.14.3
   sp_util: ^2.0.3
   pull_to_refresh: ^2.0.0
   lottie: ^1.1.0
@@ -33,20 +36,15 @@ dependencies:
   google_fonts: ^2.1.0
 
 dev_dependencies:  #flutter pub run build_runner build --delete-conflicting-outputs
-  flutter_test:
-    sdk: flutter
   retrofit_generator: ^2.0.1
   build_runner: ^2.1.2
-  json_serializable: ^4.1.4
-  freezed: "0.14.0"
+  json_serializable: ^5.0.0
+  freezed: ^0.14.5
 
 dependency_overrides:
-  source_gen: ^1.0.0
-  build: ^2.0.0
-  build_runner: ^2.1.2
-  build_config: any
-  freezed_annotation: "0.14.0"
-  freezed: "0.14.0"
+  meta: ^1.7.0
+#  freezed: ^0.12.7
+#  freezed_annotation: ^0.12.0
 
 flutter:
   uses-material-design: true

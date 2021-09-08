@@ -43,7 +43,7 @@ class _CardDemoState extends State<CardDemo> {
                           topRight: Radius.circular(10.0),
                         ),
                         child: Image.network(
-                          posts[index].imageUrl,
+                          posts[index].imageUrl!,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -55,21 +55,21 @@ class _CardDemoState extends State<CardDemo> {
                         left: 16.0,
                       ),
                       leading: CircleAvatar(
-                        backgroundImage: NetworkImage(posts[index].imageUrl),
+                        backgroundImage: NetworkImage(posts[index].imageUrl!),
                       ),
-                      title: Text(posts[index].title),
-                      subtitle: Text(posts[index].author),
+                      title: Text(posts[index].title!),
+                      subtitle: Text(posts[index].author!),
                       trailing: IconButton(
                         icon: Icon(
                           Icons.favorite,
-                          color: posts[index].liked
+                          color: posts[index].liked!
                               ? Colors.red[300]
                               : Colors.grey[300],
                           size: 20.0,
                         ),
                         onPressed: () {
                           setState(() {
-                            posts[index].liked
+                            posts[index].liked!
                                 ? posts[index].liked = false
                                 : posts[index].liked = true;
                           });

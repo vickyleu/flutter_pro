@@ -3,18 +3,18 @@
 /// message : "success"
 
 class CommentsPostsModel {
-  int _code;
-  Data _data;
-  String _message;
+  int? _code;
+  Data? _data;
+  String? _message;
 
-  int get code => _code;
-  Data get data => _data;
-  String get message => _message;
+  int? get code => _code;
+  Data? get data => _data;
+  String? get message => _message;
 
   CommentsPostsModel({
-      int code, 
-      Data data, 
-      String message}){
+      int? code, 
+      Data? data, 
+      String? message}){
     _code = code;
     _data = data;
     _message = message;
@@ -30,7 +30,7 @@ class CommentsPostsModel {
     var map = <String, dynamic>{};
     map["code"] = _code;
     if (_data != null) {
-      map["data"] = _data.toJson();
+      map["data"] = _data!.toJson();
     }
     map["message"] = _message;
     return map;
@@ -42,15 +42,15 @@ class CommentsPostsModel {
 /// comments : [{"id":2,"content":"哈哈 : )","repComment":{"content":"这个卷心菜好酷~ 🥬 ","userName":"persilee"},"createdAt":"2021-02-09T21:02:22.000Z","updatedAt":"2021-02-10T21:02:22.000Z","user":{"id":6,"name":"翠花小拍","avatar":{"largeAvatarUrl":"https://api.lishaoy.net/avatar/6?size=large","smallAvatarUrl":"https://api.lishaoy.net/avatar/6?size=small","mediumAvatarUrl":"https://api.lishaoy.net/avatar/6?size=medium"}},"postInfo":{"id":82,"title":"创意摄影#2"},"totalReplies":0}]
 
 class Data {
-  int _total;
-  List<Comments> _comments;
+  int? _total;
+  List<Comments>? _comments;
 
-  int get total => _total;
-  List<Comments> get comments => _comments;
+  int? get total => _total;
+  List<Comments>? get comments => _comments;
 
   Data({
-      int total, 
-      List<Comments> comments}){
+      int? total, 
+      List<Comments>? comments}){
     _total = total;
     _comments = comments;
 }
@@ -60,7 +60,7 @@ class Data {
     if (json["comments"] != null) {
       _comments = [];
       json["comments"].forEach((v) {
-        _comments.add(Comments.fromJson(v));
+        _comments!.add(Comments.fromJson(v));
       });
     }
   }
@@ -69,7 +69,7 @@ class Data {
     var map = <String, dynamic>{};
     map["total"] = _total;
     if (_comments != null) {
-      map["comments"] = _comments.map((v) => v.toJson()).toList();
+      map["comments"] = _comments!.map((v) => v.toJson()).toList();
     }
     return map;
   }
@@ -86,33 +86,33 @@ class Data {
 /// totalReplies : 0
 
 class Comments {
-  int _id;
-  String _content;
-  RepComment _repComment;
-  String _createdAt;
-  String _updatedAt;
-  User _user;
-  PostInfo _postInfo;
-  int _totalReplies;
+  int? _id;
+  String? _content;
+  RepComment? _repComment;
+  String? _createdAt;
+  String? _updatedAt;
+  User? _user;
+  PostInfo? _postInfo;
+  int? _totalReplies;
 
-  int get id => _id;
-  String get content => _content;
-  RepComment get repComment => _repComment;
-  String get createdAt => _createdAt;
-  String get updatedAt => _updatedAt;
-  User get user => _user;
-  PostInfo get postInfo => _postInfo;
-  int get totalReplies => _totalReplies;
+  int? get id => _id;
+  String? get content => _content;
+  RepComment? get repComment => _repComment;
+  String? get createdAt => _createdAt;
+  String? get updatedAt => _updatedAt;
+  User? get user => _user;
+  PostInfo? get postInfo => _postInfo;
+  int? get totalReplies => _totalReplies;
 
   Comments({
-      int id, 
-      String content, 
-      RepComment repComment, 
-      String createdAt, 
-      String updatedAt, 
-      User user, 
-      PostInfo postInfo, 
-      int totalReplies}){
+      int? id, 
+      String? content, 
+      RepComment? repComment, 
+      String? createdAt, 
+      String? updatedAt, 
+      User? user, 
+      PostInfo? postInfo, 
+      int? totalReplies}){
     _id = id;
     _content = content;
     _repComment = repComment;
@@ -139,15 +139,15 @@ class Comments {
     map["id"] = _id;
     map["content"] = _content;
     if (_repComment != null) {
-      map["repComment"] = _repComment.toJson();
+      map["repComment"] = _repComment!.toJson();
     }
     map["createdAt"] = _createdAt;
     map["updatedAt"] = _updatedAt;
     if (_user != null) {
-      map["user"] = _user.toJson();
+      map["user"] = _user!.toJson();
     }
     if (_postInfo != null) {
-      map["postInfo"] = _postInfo.toJson();
+      map["postInfo"] = _postInfo!.toJson();
     }
     map["totalReplies"] = _totalReplies;
     return map;
@@ -159,15 +159,15 @@ class Comments {
 /// title : "创意摄影#2"
 
 class PostInfo {
-  int _id;
-  String _title;
+  int? _id;
+  String? _title;
 
-  int get id => _id;
-  String get title => _title;
+  int? get id => _id;
+  String? get title => _title;
 
   PostInfo({
-      int id, 
-      String title}){
+      int? id, 
+      String? title}){
     _id = id;
     _title = title;
 }
@@ -191,18 +191,18 @@ class PostInfo {
 /// avatar : {"largeAvatarUrl":"https://api.lishaoy.net/avatar/6?size=large","smallAvatarUrl":"https://api.lishaoy.net/avatar/6?size=small","mediumAvatarUrl":"https://api.lishaoy.net/avatar/6?size=medium"}
 
 class User {
-  int _id;
-  String _name;
-  Avatar _avatar;
+  int? _id;
+  String? _name;
+  Avatar? _avatar;
 
-  int get id => _id;
-  String get name => _name;
-  Avatar get avatar => _avatar;
+  int? get id => _id;
+  String? get name => _name;
+  Avatar? get avatar => _avatar;
 
   User({
-      int id, 
-      String name, 
-      Avatar avatar}){
+      int? id, 
+      String? name, 
+      Avatar? avatar}){
     _id = id;
     _name = name;
     _avatar = avatar;
@@ -219,7 +219,7 @@ class User {
     map["id"] = _id;
     map["name"] = _name;
     if (_avatar != null) {
-      map["avatar"] = _avatar.toJson();
+      map["avatar"] = _avatar!.toJson();
     }
     return map;
   }
@@ -231,18 +231,18 @@ class User {
 /// mediumAvatarUrl : "https://api.lishaoy.net/avatar/6?size=medium"
 
 class Avatar {
-  String _largeAvatarUrl;
-  String _smallAvatarUrl;
-  String _mediumAvatarUrl;
+  String? _largeAvatarUrl;
+  String? _smallAvatarUrl;
+  String? _mediumAvatarUrl;
 
-  String get largeAvatarUrl => _largeAvatarUrl;
-  String get smallAvatarUrl => _smallAvatarUrl;
-  String get mediumAvatarUrl => _mediumAvatarUrl;
+  String? get largeAvatarUrl => _largeAvatarUrl;
+  String? get smallAvatarUrl => _smallAvatarUrl;
+  String? get mediumAvatarUrl => _mediumAvatarUrl;
 
   Avatar({
-      String largeAvatarUrl, 
-      String smallAvatarUrl, 
-      String mediumAvatarUrl}){
+      String? largeAvatarUrl, 
+      String? smallAvatarUrl, 
+      String? mediumAvatarUrl}){
     _largeAvatarUrl = largeAvatarUrl;
     _smallAvatarUrl = smallAvatarUrl;
     _mediumAvatarUrl = mediumAvatarUrl;
@@ -268,15 +268,15 @@ class Avatar {
 /// userName : "persilee"
 
 class RepComment {
-  String _content;
-  String _userName;
+  String? _content;
+  String? _userName;
 
-  String get content => _content;
-  String get userName => _userName;
+  String? get content => _content;
+  String? get userName => _userName;
 
   RepComment({
-      String content, 
-      String userName}){
+      String? content, 
+      String? userName}){
     _content = content;
     _userName = userName;
 }

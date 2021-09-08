@@ -37,28 +37,30 @@ Map<int, int> MONTH_DAY = {
 /// Date Util.
 class DateUtil {
   /// get DateTime By DateStr.
-  static DateTime getDateTime(String dateStr, {bool isUtc}) {
-    DateTime dateTime = DateTime.tryParse(dateStr);
+  static DateTime? getDateTime(String dateStr, {bool? isUtc}) {
+    DateTime? dateTime = DateTime.tryParse(dateStr);
     if (isUtc != null) {
       if (isUtc) {
-        dateTime = dateTime.toUtc();
+        dateTime = dateTime!.toUtc();
       } else {
-        dateTime = dateTime.toLocal();
+        dateTime = dateTime!.toLocal();
       }
     }
     return dateTime;
   }
 
   /// get DateTime By Milliseconds.
-  static DateTime getDateTimeByMs(int ms, {bool isUtc = false}) {
-    return ms == null
-        ? null
-        : DateTime.fromMillisecondsSinceEpoch(ms, isUtc: isUtc);
+  static DateTime? getDateTimeByMs(int ms, {bool isUtc = false}) {
+    if (ms == null) {
+      return null;
+    } else {
+      return DateTime.fromMillisecondsSinceEpoch(ms, isUtc: isUtc);
+    }
   }
 
   /// get DateMilliseconds By DateStr.
-  static int getDateMsByTimeStr(String dateStr, {bool isUtc}) {
-    DateTime dateTime = getDateTime(dateStr, isUtc: isUtc);
+  static int? getDateMsByTimeStr(String dateStr, {bool? isUtc}) {
+    DateTime? dateTime = getDateTime(dateStr, isUtc: isUtc);
     return dateTime?.millisecondsSinceEpoch;
   }
 
@@ -74,13 +76,13 @@ class DateUtil {
 
   /// format date by milliseconds.
   /// milliseconds 日期毫秒
-  static String formatDateMs(int ms, {bool isUtc = false, String format}) {
+  static String formatDateMs(int ms, {bool isUtc = false, String? format}) {
     return formatDate(getDateTimeByMs(ms, isUtc: isUtc), format: format);
   }
 
   /// format date by date str.
   /// dateStr 日期字符串
-  static String formatDateStr(String dateStr, {bool isUtc, String format}) {
+  static String formatDateStr(String dateStr, {bool? isUtc, String? format}) {
     return formatDate(getDateTime(dateStr, isUtc: isUtc), format: format);
   }
 
@@ -89,7 +91,7 @@ class DateUtil {
   /// 格式要求
   /// year -> yyyy/yy   month -> MM/M    day -> dd/d
   /// hour -> HH/H      minute -> mm/m   second -> ss/s
-  static String formatDate(DateTime dateTime, {String format}) {
+  static String formatDate(DateTime? dateTime, {String? format}) {
     if (dateTime == null) return '';
     format = format ?? DateFormats.full;
     if (format.contains('yy')) {
@@ -131,10 +133,10 @@ class DateUtil {
   /// isUtc
   /// languageCode zh or en
   /// short
-  static String getWeekday(DateTime dateTime,
-      {String languageCode = 'en', bool short = false}) {
+  static String? getWeekday(DateTime? dateTime,
+      {String? languageCode = 'en', bool short = false}) {
     if (dateTime == null) return null;
-    String weekday;
+    String? weekday;
     switch (dateTime.weekday) {
       case 1:
         weekday = languageCode == 'zh' ? '星期一' : 'Monday';
@@ -161,14 +163,14 @@ class DateUtil {
         break;
     }
     return languageCode == 'zh'
-        ? (short ? weekday.replaceAll('星期', '周') : weekday)
-        : weekday.substring(0, short ? 3 : weekday.length);
+        ? (short ? weekday!.replaceAll('星期', '周') : weekday)
+        : weekday!.substring(0, short ? 3 : weekday.length);
   }
 
   /// get WeekDay By Milliseconds.
-  static String getWeekdayByMs(int milliseconds,
-      {bool isUtc = false, String languageCode, bool short = false}) {
-    DateTime dateTime = getDateTimeByMs(milliseconds, isUtc: isUtc);
+  static String? getWeekdayByMs(int milliseconds,
+      {bool isUtc = false, String? languageCode, bool short = false}) {
+    DateTime? dateTime = getDateTimeByMs(milliseconds, isUtc: isUtc);
     return getWeekday(dateTime, languageCode: languageCode, short: short);
   }
 
@@ -179,7 +181,7 @@ class DateUtil {
     int month = dateTime.month;
     int days = dateTime.day;
     for (int i = 1; i < month; i++) {
-      days = days + MONTH_DAY[i];
+      days = days + MONTH_DAY[i]!;
     }
     if (isLeapYearByYear(year) && month > 2) {
       days = days + 1;
@@ -195,13 +197,12 @@ class DateUtil {
 
   /// is today.
   /// 是否是当天.
-  static bool isToday(int milliseconds, {bool isUtc = false, int locMs}) {
+  static bool isToday(int milliseconds, {bool isUtc = false, int? locMs}) {
     if (milliseconds == null || milliseconds == 0) return false;
-    DateTime old =
-    DateTime.fromMillisecondsSinceEpoch(milliseconds, isUtc: isUtc);
+    DateTime old = DateTime.fromMillisecondsSinceEpoch(milliseconds, isUtc: isUtc);
     DateTime now;
     if (locMs != null) {
-      now = DateUtil.getDateTimeByMs(locMs);
+      now = DateUtil.getDateTimeByMs(locMs)??DateTime.now();
     } else {
       now = isUtc ? DateTime.now().toUtc() : DateTime.now().toLocal();
     }
@@ -232,14 +233,14 @@ class DateUtil {
 
   /// is Week.
   /// 是否是本周.
-  static bool isWeek(int ms, {bool isUtc = false, int locMs}) {
+  static bool isWeek(int ms, {bool isUtc = false, int? locMs}) {
     if (ms == null || ms <= 0) {
       return false;
     }
     DateTime _old = DateTime.fromMillisecondsSinceEpoch(ms, isUtc: isUtc);
     DateTime _now;
     if (locMs != null) {
-      _now = DateUtil.getDateTimeByMs(locMs, isUtc: isUtc);
+      _now = DateUtil.getDateTimeByMs(locMs, isUtc: isUtc)??DateTime.now();
     } else {
       _now = isUtc ? DateTime.now().toUtc() : DateTime.now().toLocal();
     }

@@ -190,14 +190,14 @@ class TimelineUtil {
   /// dateTime
   /// locDateTime: current time or schedule time.
   /// locale: output key.
-  static String formatByDateTime(
-      DateTime dateTime, {
-        DateTime locDateTime,
-        String locale,
-        DayFormat dayFormat,
+  static String? formatByDateTime(
+      DateTime? dateTime, {
+        DateTime? locDateTime,
+        String? locale,
+        DayFormat? dayFormat,
       }) {
     return format(
-      dateTime?.millisecondsSinceEpoch,
+      dateTime?.millisecondsSinceEpoch??0,
       locTimeMs: locDateTime?.millisecondsSinceEpoch,
       locale: locale,
       dayFormat: dayFormat,
@@ -208,11 +208,11 @@ class TimelineUtil {
   /// dateTime : millis.
   /// locDateTime: current time or schedule time. millis.
   /// locale: output key.
-  static String format(
+  static String? format(
       int ms, {
-        int locTimeMs,
-        String locale,
-        DayFormat dayFormat,
+        int? locTimeMs,
+        String? locale,
+        DayFormat? dayFormat,
       }) {
     int _locTimeMs = locTimeMs ?? DateTime.now().millisecondsSinceEpoch;
     String _locale = locale ?? 'en';
@@ -234,7 +234,7 @@ class TimelineUtil {
       suffix = _info.suffixAgo();
     }
 
-    String timeline;
+    String? timeline;
     if (_info.customYesterday().isNotEmpty &&
         DateUtil.isYesterdayByMs(ms, _locTimeMs)) {
       return _getYesterday(ms, _info, _dayFormat);
@@ -272,7 +272,7 @@ class TimelineUtil {
       timeline = _formatDays(ms, days.round(), _info, _dayFormat);
       suffix = (_dayFormat == DayFormat.Simple ? suffix : '');
     }
-    return timeline + suffix;
+    return timeline! + suffix;
   }
 
   /// Timeline like QQ.
@@ -281,9 +281,9 @@ class TimelineUtil {
   /// yesterday (昨天;Yesterday)
   /// this week (星期一,周一;Monday,Mon)
   /// others (yyyy-MM-dd)
-  static String formatA(
+  static String? formatA(
       int ms, {
-        int locMs,
+        int? locMs,
         String formatToday = 'HH:mm',
         String format = 'yyyy-MM-dd',
         String languageCode = 'en',
@@ -340,13 +340,13 @@ class TimelineUtil {
   }
 
   /// format Days.
-  static String _formatDays(
+  static String? _formatDays(
       int ms,
       num days,
       TimelineInfo info,
       DayFormat dayFormat,
       ) {
-    String timeline;
+    String? timeline;
     switch (dayFormat) {
       case DayFormat.Simple:
         timeline = (days == 1

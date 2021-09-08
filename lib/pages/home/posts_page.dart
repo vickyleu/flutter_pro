@@ -10,7 +10,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 final categoryTabProvider =
     StateNotifierProvider((ref) => CategoryTabViewModel());
-final postsProvider = StateNotifierProvider.family<PostsViewModel,dynamic, int>(
+final StateNotifierProviderFamily<PostsViewModel, dynamic, int>? postsProvider = StateNotifierProvider.family<PostsViewModel,dynamic, int>(
     (ref, categoryId) => PostsViewModel(categoryId));
 
 class PostsPage extends StatefulWidget {
@@ -22,8 +22,8 @@ class _PostsPageState extends State<PostsPage>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   List<Tab> _tabs = [];
 
-  ScrollController _scrollController;
-  RefreshController _refreshController;
+  ScrollController? _scrollController;
+  RefreshController? _refreshController;
 
   @override
   void initState() {
@@ -34,8 +34,8 @@ class _PostsPageState extends State<PostsPage>
 
   @override
   void dispose() {
-    _scrollController.dispose();
-    _refreshController.dispose();
+    _scrollController!.dispose();
+    _refreshController!.dispose();
     super.dispose();
   }
 
@@ -43,7 +43,7 @@ class _PostsPageState extends State<PostsPage>
   Widget build(BuildContext context) {
     super.build(context);
     return Consumer(builder: (context, watch, _) {
-      List<Category> categories = watch(categoryTabProvider.notifier).state.categories;
+      List<Category> categories = watch(categoryTabProvider.notifier).state.categories!;
       _initTabs(categories);
       return DefaultTabController(
         length: _tabs.length,
@@ -51,18 +51,18 @@ class _PostsPageState extends State<PostsPage>
         child: Builder(
           builder: (BuildContext context) {
             final TabController tabController =
-                DefaultTabController.of(context);
+                DefaultTabController.of(context)!;
             tabController.addListener(() {
               if (!tabController.indexIsChanging) {
-                if (_refreshController.footerStatus == LoadStatus.noMore) {
-                  _refreshController.footerMode.value = LoadStatus.canLoading;
+                if (_refreshController!.footerStatus == LoadStatus.noMore) {
+                  _refreshController!.footerMode!.value = LoadStatus.canLoading;
                 }
               }
             });
             return Scaffold(
               body: Container(
                 color: Color.fromRGBO(249, 249, 249, 1),
-                padding: EdgeInsets.fromLTRB(4, ScreenUtil.instance.statusBarHeight, 4, 18),
+                padding: EdgeInsets.fromLTRB(4, ScreenUtil.instance!.statusBarHeight, 4, 18),
                 child: Column(
                   children: [
                     Container(
@@ -92,7 +92,7 @@ class _PostsPageState extends State<PostsPage>
           },
         ),
       );
-    });
+    } as Widget Function(BuildContext, T Function<T>(ProviderBase<Object?, T>), Widget?));
   }
 
   List<Widget> _createTabPage(List<Category> categories) {

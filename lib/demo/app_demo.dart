@@ -143,7 +143,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  PreferredSizeWidget _getBottom() {
+  PreferredSizeWidget? _getBottom() {
     if (_currentIndex == 0) {
       return TabBar(
         isScrollable: false,
@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Widget _getPages() {
+  Widget? _getPages() {
     switch (_currentIndex) {
       case 0:
         return TabBarView(

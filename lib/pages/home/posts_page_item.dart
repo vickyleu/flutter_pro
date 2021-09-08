@@ -16,17 +16,17 @@ import 'package:transparent_image/transparent_image.dart';
 final colorProvider = StateProvider((ref) => 0);
 
 class PostsPageItem extends ConsumerWidget {
-  final int categoryId;
-  final Post post;
-  final int index;
+  final int? categoryId;
+  final Post? post;
+  final int? index;
 
   PostsPageItem(
-      {Key key,this.categoryId , this.post, this.index})
+      {Key? key,this.categoryId , this.post, this.index})
       : super(key: key);
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    return post.files.length > 0
+    return post!.files!.length > 0
         ? Container(
       padding: EdgeInsets.only(top: 12),
             child: Row(
@@ -36,12 +36,12 @@ class PostsPageItem extends ConsumerWidget {
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => PostsPageDetails(
-                                postId: post.id,
-                                userId: post.user.id,
+                                postId: post!.id,
+                                userId: post!.user!.id,
                               ))).then((value) {
                         context
-                            .read(postsProvider(categoryId))
-                            .updatePostById(post.id, index);
+                            .read(postsProvider!(categoryId!))
+                            .updatePostById(post!.id, index);
                       });
                     },
                     child: Container(
@@ -88,10 +88,10 @@ class PostsPageItem extends ConsumerWidget {
     double _radius = 20.0;
 
     /// 照片是6，9张时，每行显示3个
-    final _isThreeRow = [3, 2].contains(post.files.length / 3);
+    final _isThreeRow = [3, 2].contains(post!.files!.length / 3);
 
     /// 照片是2，4张时，每行显示2个
-    final _isTwoRow = [2, 1].contains(post.files.length / 2);
+    final _isTwoRow = [2, 1].contains(post!.files!.length / 2);
 
     /// 控制圆角显示
     if (post?.category == '摄影' && (_isThreeRow || _isTwoRow)) {
@@ -100,10 +100,10 @@ class PostsPageItem extends ConsumerWidget {
 
     /// 时间格式化
     String timeline = TimelineUtil.format(
-        DateUtil.getDateMsByTimeStr(post.createdAt),
+        DateUtil.getDateMsByTimeStr(post!.createdAt!)!,
         locTimeMs: DateTime.now().millisecondsSinceEpoch,
         locale: 'zh',
-        dayFormat: DayFormat.Simple);
+        dayFormat: DayFormat.Simple)!;
     return ClipRRect(
       borderRadius: BorderRadius.vertical(bottom: Radius.circular(_radius)),
       child: Container(
@@ -120,7 +120,7 @@ class PostsPageItem extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              post?.title,
+              post?.title??"",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -135,7 +135,7 @@ class PostsPageItem extends ConsumerWidget {
             Row(
               children: [
                 Text(
-                  post?.user?.name,
+                  post?.user?.name??"",
                   style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
@@ -147,7 +147,7 @@ class PostsPageItem extends ConsumerWidget {
                   maxLines: 1,
                   softWrap: true,
                 ),
-                categoryId < 0
+                categoryId! < 0
                     ? Text(
                         '  •  ${post?.category}',
                         style: TextStyle(
@@ -194,7 +194,7 @@ class PostsPageItem extends ConsumerWidget {
             color: Colors.grey.withOpacity(0.4),
           ),
           Text(
-            post?.totalComments != null ? post.totalComments.toString() : '0',
+            post?.totalComments != null ? post!.totalComments.toString() : '0',
             style: TextStyle(
               fontSize: 12,
               color: Colors.grey.withOpacity(0.4),
@@ -216,7 +216,7 @@ class PostsPageItem extends ConsumerWidget {
           color: Colors.grey.withOpacity(0.4),
         ),
         Text(
-          post?.views.toString(),
+          post?.views.toString()??"",
           style: TextStyle(
             fontSize: 12,
             color: Colors.grey.withOpacity(0.4),
@@ -253,11 +253,11 @@ class PostsPageItem extends ConsumerWidget {
             ),
           ),
           clickCallback: () async {
-            await context.read(postsProvider(categoryId)).clickLike(post.id, index);
+            await context.read(postsProvider!(categoryId!)).clickLike(post!.id, index);
           },
         ),
         Text(
-          post.totalLikes.toString(),
+          post!.totalLikes.toString(),
           style: TextStyle(
             fontSize: 12,
             color: Colors.grey.withOpacity(0.6),
@@ -273,7 +273,7 @@ class PostsPageItem extends ConsumerWidget {
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ProfilePage(
-              userId: post.user.id,
+              userId: post!.user!.id,
               isCreatePage: true,
             )));
       },
@@ -285,7 +285,7 @@ class PostsPageItem extends ConsumerWidget {
         child: ClipOval(
           child: FadeInImage.memoryNetwork(
             placeholder: kTransparentImage,
-            image: post?.user?.avatar?.mediumAvatarUrl,
+            image: post?.user?.avatar?.mediumAvatarUrl??"",
             fit: BoxFit.cover,
             width: 36.0,
           ),
@@ -295,23 +295,23 @@ class PostsPageItem extends ConsumerWidget {
   }
 
   Widget _gridItemBuilder(BuildContext context, int index) {
-    return CacheImage(url: post.files[index].thumbnailImageUrl);
+    return CacheImage(url: post!.files![index].thumbnailImageUrl);
   }
 
   Widget _createImage() {
-    Files _files = post?.files[0];
+    Files? _files = post?.files?[0];
 
     /// 根据图片宽高显示横、竖展示图片
     double _aspectRatio = 3 / 2;
-    if (_files.width < _files?.height) {
+    if ((_files?.width??0) < (_files?.height??0)) {
       _aspectRatio = 3 / 4;
     }
 
     /// 照片是6，9张时，每行显示3个
-    final _isThreeRow = [3, 2].contains(post.files.length / 3);
+    final _isThreeRow = [3, 2].contains(post!.files!.length / 3);
 
     /// 照片是2，4张时，每行显示2个
-    final _isTwoRow = [2, 1].contains(post.files.length / 2);
+    final _isTwoRow = [2, 1].contains(post!.files!.length / 2);
 
     /// 当分类是摄影时，显示网格布局
     if (post?.category == '摄影' && (_isThreeRow || _isTwoRow)) {

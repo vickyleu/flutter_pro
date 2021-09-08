@@ -6,13 +6,13 @@ import 'package:pro_flutter/models/post_model.dart';
 import 'package:pro_flutter/widgets/pic_swiper.dart';
 
 class ImagePaper extends StatefulWidget {
-  final Post post;
+  final Post? post;
   final placeholder;
-  final bool knowImageSize;
-  final int index;
+  final bool? knowImageSize;
+  final int? index;
 
   const ImagePaper(
-      {Key key,
+      {Key? key,
         this.post,
         this.placeholder = 'assets/images/animationImage.gif',
         this.knowImageSize,
@@ -25,7 +25,7 @@ class ImagePaper extends StatefulWidget {
 
 class _ImagePaperState extends State<ImagePaper>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  late AnimationController _controller;
 
   @override
   void initState() {
@@ -45,19 +45,19 @@ class _ImagePaperState extends State<ImagePaper>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.post.files.isEmpty) {
+    if (widget.post!.files!.isEmpty) {
       return Container();
     }
-    var lists = widget.post?.files?.reversed?.toList();
-    final Files imageItem = lists[widget.index];
+    List<Files> lists = widget.post?.files?.reversed.toList()??[];
+    final Files imageItem = lists[widget.index!];
 
     return ExtendedImage.network(
-      imageItem.mediumImageUrl,
+      imageItem.mediumImageUrl!,
       fit: BoxFit.cover,
       cache: true,
       clearMemoryCacheWhenDispose: true,
       loadStateChanged: (ExtendedImageState state) {
-        Widget _image;
+        Widget? _image;
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
             _controller.reset();
@@ -68,9 +68,9 @@ class _ImagePaperState extends State<ImagePaper>
             break;
           case LoadState.completed:
             _controller.forward();
-            state.returnLoadStateChangedWidget = !widget.knowImageSize;
+            state.returnLoadStateChangedWidget = !widget.knowImageSize!;
             _image = Hero(
-              tag: imageItem.mediumImageUrl,
+              tag: imageItem.mediumImageUrl!,
               child: FadeTransition(
                 opacity: _controller,
                 child: ExtendedRawImage(
@@ -135,13 +135,13 @@ class _ImagePaperState extends State<ImagePaper>
 /// Transparent Page Route
 class TransparentPageRoute<T> extends PageRouteBuilder<T> {
   TransparentPageRoute({
-    RouteSettings settings,
-    @required RoutePageBuilder pageBuilder,
+    RouteSettings? settings,
+    required RoutePageBuilder pageBuilder,
     RouteTransitionsBuilder transitionsBuilder = _defaultTransitionsBuilder,
     Duration transitionDuration = const Duration(milliseconds: 150),
     bool barrierDismissible = false,
-    Color barrierColor,
-    String barrierLabel,
+    Color? barrierColor,
+    String? barrierLabel,
     bool maintainState = true,
   }) : super(
     settings: settings,

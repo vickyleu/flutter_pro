@@ -10,11 +10,11 @@ import 'package:pro_flutter/models/single_post_model.dart';
 import 'package:pro_flutter/widgets/page_state.dart';
 
 class DetailsState {
-  final Post post;
-  final List<Post> restPosts;
-  final List<Comments> comments;
-  final PageState pageState;
-  final BaseError error;
+  final Post? post;
+  final List<Post>? restPosts;
+  final List<Comments>? comments;
+  final PageState? pageState;
+  final BaseError? error;
 
   DetailsState(
       {this.post, this.restPosts, this.comments, this.pageState, this.error});
@@ -27,11 +27,11 @@ class DetailsState {
         error = null;
 
   DetailsState copyWith({
-    Post post,
-    List<Post> restPosts,
-    List<Comments> comments,
-    PageState pageState,
-    BaseError error,
+    Post? post,
+    List<Post>? restPosts,
+    List<Comments>? comments,
+    PageState? pageState,
+    BaseError? error,
   }) {
     return DetailsState(
       post: post ?? this.post,
@@ -44,7 +44,7 @@ class DetailsState {
 }
 
 class DetailsViewModel extends StateNotifier<DetailsState> {
-  DetailsViewModel(DetailsParams params, [DetailsState state])
+  DetailsViewModel(DetailsParams params, [DetailsState? state])
       : super(state ?? DetailsState.initial()) {
     getPostsDetails(params);
   }
@@ -69,15 +69,15 @@ class DetailsViewModel extends StateNotifier<DetailsState> {
         await Future.delayed(Duration(milliseconds: 666));
         state = state.copyWith(
           post: singlePostModel.data,
-          restPosts: [...postModel.data.posts],
-          comments: [...commentsPostsModel.data.comments],
+          restPosts: [...postModel.data!.posts!],
+          comments: [...commentsPostsModel.data!.comments!],
           pageState: PageState.dataFetchState,
         );
       }
     } catch (e) {
       state = state.copyWith(
           pageState: PageState.errorState,
-          error: BaseDio.getInstance().getDioError(e));
+          error: BaseDio.getInstance()!.getDioError(e));
     }
   }
 
@@ -92,13 +92,13 @@ class DetailsViewModel extends StateNotifier<DetailsState> {
             await ApiClient().getPostsComments(comment['postId']);
         if (commentsPostsModel.message == 'success') {
           state =
-              state.copyWith(comments: [...commentsPostsModel.data.comments]);
+              state.copyWith(comments: [...commentsPostsModel.data!.comments!]);
         }
       }
     } catch (e) {
       state = state.copyWith(
           pageState: PageState.errorState,
-          error: BaseDio.getInstance().getDioError(e));
+          error: BaseDio.getInstance()!.getDioError(e));
     }
   }
 
@@ -115,13 +115,13 @@ class DetailsViewModel extends StateNotifier<DetailsState> {
             await ApiClient().getPostsComments(comment['postId']);
         if (commentsPostsModel.message == 'success') {
           state =
-              state.copyWith(comments: [...commentsPostsModel.data.comments]);
+              state.copyWith(comments: [...commentsPostsModel.data!.comments!]);
         }
       }
     } catch (e) {
       state = state.copyWith(
           pageState: PageState.errorState,
-          error: BaseDio.getInstance().getDioError(e));
+          error: BaseDio.getInstance()!.getDioError(e));
     }
   }
 
@@ -142,7 +142,7 @@ class DetailsViewModel extends StateNotifier<DetailsState> {
     } catch (e) {
       state = state.copyWith(
           pageState: PageState.errorState,
-          error: BaseDio.getInstance().getDioError(e));
+          error: BaseDio.getInstance()!.getDioError(e));
     }
   }
 }

@@ -16,28 +16,28 @@ import 'package:transparent_image/transparent_image.dart';
 
 class SliverDelegate extends SliverPersistentHeaderDelegate {
   BuildContext context;
-  int userId;
+  int? userId;
   GlobalKey textKey;
-  Rect textSize;
+  Rect? textSize;
   ProfileState profileState;
   bool isCreatePage;
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    double textWidth = textSize != null ? textSize.width : 0.0;
+    double textWidth = textSize != null ? textSize!.width : 0.0;
     double maxShrinkOffset = this.maxExtent - this.minExtent;
-    double t = (shrinkOffset / maxShrinkOffset).clamp(0.0, 1.0) as double;
+    double t = (shrinkOffset / maxShrinkOffset).clamp(0.0, 1.0);
     double mt = Tween<double>(begin: 66.0, end: 16.0).transform(t);
     double ctt = Tween<double>(begin: 0, end: 32).transform(t);
-    double minTop = mt + ScreenUtil.instance.statusBarHeight;
+    double minTop = mt + ScreenUtil.instance!.statusBarHeight;
     double textTop = (maxShrinkOffset - shrinkOffset) / 3 + minTop;
-    double textLeft = (ScreenUtil.instance.width - textWidth) / 2;
+    double textLeft = (ScreenUtil.instance!.width - textWidth) / 2;
     textLeft = textLeft - (textLeft - 60) * t; // left
     double cTextLeft = textLeft + ctt; // center
     double imt = Tween<double>(begin: 0.0, end: 12).transform(t);
     double imageTop = minTop - imt;
-    double imageLeft = (ScreenUtil.instance.width - 56) / 2;
+    double imageLeft = (ScreenUtil.instance!.width - 56) / 2;
     imageLeft = imageLeft - (imageLeft - 6) * t; // left
     double cImageLeft = imageLeft + ctt; // center
     double scaleImageValue = Tween<double>(begin: 1, end: 0.6).transform(t);
@@ -68,10 +68,10 @@ class SliverDelegate extends SliverPersistentHeaderDelegate {
                     (BuildContext context, BoxConstraints constraints) {
                   return FadeInImage.memoryNetwork(
                     height: constraints.maxHeight,
-                    width: ScreenUtil.instance.width,
+                    width: ScreenUtil.instance!.width,
                     placeholder: kTransparentImage,
                     fit: BoxFit.cover,
-                    image: profileState.user.data.avatar.largeAvatarUrl,
+                    image: profileState.user!.data!.avatar!.largeAvatarUrl!,
                   );
                 }),
                 Container(
@@ -108,14 +108,14 @@ class SliverDelegate extends SliverPersistentHeaderDelegate {
                 Positioned(
                   bottom: 26,
                   child: Container(
-                    width: ScreenUtil.instance.width,
+                    width: ScreenUtil.instance!.width,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         _createNumTag(
-                            profileState.user.data.totalPosts.toString(), '作品'),
+                            profileState.user!.data!.totalPosts.toString(), '作品'),
                         _createNumTag(
-                            profileState.user.data.totalLikes.toString(), '赞过'),
+                            profileState.user!.data!.totalLikes.toString(), '赞过'),
                         _createNumTag('666', '粉丝'),
                         _createNumTag('36', '关注'),
                       ],
@@ -174,7 +174,7 @@ class SliverDelegate extends SliverPersistentHeaderDelegate {
             child: ClipOval(
               child: FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
-                image: profileState.user.data.avatar.mediumAvatarUrl,
+                image: profileState.user!.data!.avatar!.mediumAvatarUrl!,
                 fit: BoxFit.cover,
                 width: 56.0,
                 height: 56.0,
@@ -188,7 +188,7 @@ class SliverDelegate extends SliverPersistentHeaderDelegate {
           child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
             return Text(
-              profileState.user.data.name,
+              profileState.user!.data!.name!,
               key: textKey,
               style: TextStyle(
                 fontSize: 18,
@@ -244,10 +244,10 @@ class SliverDelegate extends SliverPersistentHeaderDelegate {
 
   SliverDelegate(this.context, this.userId, this.textKey, this.textSize,
       this.profileState, this.isCreatePage) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       if (textSize == null) {
-        textSize = WidgetUtil.getWidgetBounds(textKey.currentContext);
-        context.read(profileProvider(userId)).getTextRect(textSize);
+        textSize = WidgetUtil.getWidgetBounds(textKey.currentContext!);
+        context.read(profileProvider!(userId!)).getTextRect(textSize);
       }
     });
   }

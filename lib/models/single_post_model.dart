@@ -5,18 +5,18 @@ import 'package:pro_flutter/models/post_model.dart';
 /// message : "success"
 
 class SinglePostModel {
-  int _code;
-  Post _data;
-  String _message;
+  int? _code;
+  Post? _data;
+  String? _message;
 
-  int get code => _code;
-  Post get data => _data;
-  String get message => _message;
+  int? get code => _code;
+  Post? get data => _data;
+  String? get message => _message;
 
   SinglePostModel({
-      int code, 
-      Post data,
-      String message}){
+      int? code, 
+      Post? data,
+      String? message}){
     _code = code;
     _data = data;
     _message = message;
@@ -32,7 +32,7 @@ class SinglePostModel {
     var map = <String, dynamic>{};
     map["code"] = _code;
     if (_data != null) {
-      map["data"] = _data.toJson();
+      map["data"] = _data!.toJson();
     }
     map["message"] = _message;
     return map;

@@ -1,7 +1,7 @@
 class LoginModel {
-  int code;
-  Login data;
-  String message;
+  int? code;
+  Login? data;
+  String? message;
 
   LoginModel({this.code, this.data, this.message});
 
@@ -15,7 +15,7 @@ class LoginModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['code'] = this.code;
     if (this.data != null) {
-      data['data'] = this.data.toJson();
+      data['data'] = this.data!.toJson();
     }
     data['message'] = this.message;
     return data;
@@ -23,10 +23,10 @@ class LoginModel {
 }
 
 class Login {
-  int id;
-  String name;
-  String password;
-  String token;
+  int? id;
+  String? name;
+  String? password;
+  String? token;
 
   Login({this.id, this.name,this.password, this.token});
 

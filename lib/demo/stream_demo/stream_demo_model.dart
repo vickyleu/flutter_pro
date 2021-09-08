@@ -8,7 +8,7 @@ enum StreamViewState { Busy, DataRetrieved, NoData }
 class StreamDemoModel {
   final StreamController<StreamDemoState> _stateController = StreamController<StreamDemoState>();
 
-  List<String> _listItems;
+  List<String>? _listItems;
 
   Stream<StreamDemoState> get streamState => _stateController.stream;
 
@@ -28,7 +28,7 @@ class StreamDemoModel {
     }
 
     if (!hasData) {
-      return _stateController.add(DataFetchedState(data: List<String>()));
+      return _stateController.add(DataFetchedState(data: []));
     }
 
     _listItems = List<String>.generate(10, (index) => '$index content');

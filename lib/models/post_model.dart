@@ -15,9 +15,9 @@ class PostModel {
     this.message,
   });
 
-  int code;
-  Data data;
-  String message;
+  int? code;
+  Data? data;
+  String? message;
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
         code: json["code"],
@@ -27,7 +27,7 @@ class PostModel {
 
   Map<String, dynamic> toJson() => {
         "code": code,
-        "data": data.toJson(),
+        "data": data!.toJson(),
         "message": message,
       };
 }
@@ -38,8 +38,8 @@ class Data {
     this.posts,
   });
 
-  int total;
-  List<Post> posts;
+  int? total;
+  List<Post>? posts;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         total: json["total"],
@@ -48,7 +48,7 @@ class Data {
 
   Map<String, dynamic> toJson() => {
         "total": total,
-        "posts": List<dynamic>.from(posts.map((x) => x.toJson())),
+        "posts": List<dynamic>.from(posts!.map((x) => x.toJson())),
       };
 }
 
@@ -63,51 +63,51 @@ class Data {
 /// totalLikes : 1
 
 class Post {
-  int _id;
-  String _content;
-  String _title;
-  String _category;
-  int _views;
-  String _createdAt;
-  String _updatedAt;
-  User _user;
+  int? _id;
+  String? _content;
+  String? _title;
+  String? _category;
+  int? _views;
+  String? _createdAt;
+  String? _updatedAt;
+  User? _user;
   dynamic _totalComments;
-  CoverImage _coverImage;
-  List<Files> _files;
+  CoverImage? _coverImage;
+  List<Files>? _files;
   dynamic _tags;
-  int _liked;
-  int _totalLikes;
+  int? _liked;
+  int? _totalLikes;
 
-  int get id => _id;
-  String get content => _content;
-  int get views => _views;
-  String get createdAt => _createdAt;
-  String get updatedAt => _updatedAt;
-  String get title => _title;
-  String get category => _category;
-  User get user => _user;
+  int? get id => _id;
+  String? get content => _content;
+  int? get views => _views;
+  String? get createdAt => _createdAt;
+  String? get updatedAt => _updatedAt;
+  String? get title => _title;
+  String? get category => _category;
+  User? get user => _user;
   dynamic get totalComments => _totalComments;
-  CoverImage get coverImage => _coverImage;
-  List<Files> get files => _files;
+  CoverImage? get coverImage => _coverImage;
+  List<Files>? get files => _files;
   dynamic get tags => _tags;
-  int get liked => _liked;
-  int get totalLikes => _totalLikes;
+  int? get liked => _liked;
+  int? get totalLikes => _totalLikes;
 
   Post({
-    int id,
-    String content,
-    String title,
-    String category,
-    int views,
-    String createdAt,
-    String updatedAt,
-    User user,
+    int? id,
+    String? content,
+    String? title,
+    String? category,
+    int? views,
+    String? createdAt,
+    String? updatedAt,
+    User? user,
     dynamic totalComments,
-    CoverImage coverImage,
-    List<Files> files,
+    CoverImage? coverImage,
+    List<Files>? files,
     dynamic tags,
-    int liked,
-    int totalLikes}){
+    int? liked,
+    int? totalLikes}){
     _id = id;
     _content = content;
     _title = title;
@@ -138,7 +138,7 @@ class Post {
     if (json["files"] != null) {
       _files = [];
       json["files"].forEach((v) {
-        _files.add(Files.fromJson(v));
+        _files!.add(Files.fromJson(v));
       });
     }
     _tags = json["tags"];
@@ -156,14 +156,14 @@ class Post {
     map["createdAt"] = _createdAt;
     map["updatedAt"] = _updatedAt;
     if (_user != null) {
-      map["user"] = _user.toJson();
+      map["user"] = _user!.toJson();
     }
     map["totalComments"] = _totalComments;
     if (_coverImage != null) {
-      map["coverImage"] = _coverImage.toJson();
+      map["coverImage"] = _coverImage!.toJson();
     }
     if (_files != null) {
-      map["files"] = _files.map((v) => v.toJson()).toList();
+      map["files"] = _files!.map((v) => v.toJson()).toList();
     }
     map["tags"] = _tags;
     map["liked"] = _liked;
@@ -181,27 +181,27 @@ class Post {
 /// thumbnailImageUrl : "https://api.lishaoy.net/files/5/serve?size=thumbnail"
 
 class Files {
-  int _id;
-  int _width;
-  int _height;
-  String _largeImageUrl;
-  String _mediumImageUrl;
-  String _thumbnailImageUrl;
+  int? _id;
+  int? _width;
+  int? _height;
+  String? _largeImageUrl;
+  String? _mediumImageUrl;
+  String? _thumbnailImageUrl;
 
-  int get id => _id;
-  int get width => _width;
-  int get height => _height;
-  String get largeImageUrl => _largeImageUrl;
-  String get mediumImageUrl => _mediumImageUrl;
-  String get thumbnailImageUrl => _thumbnailImageUrl;
+  int? get id => _id;
+  int? get width => _width;
+  int? get height => _height;
+  String? get largeImageUrl => _largeImageUrl;
+  String? get mediumImageUrl => _mediumImageUrl;
+  String? get thumbnailImageUrl => _thumbnailImageUrl;
 
   Files({
-    int id,
-    int width,
-    int height,
-    String largeImageUrl,
-    String mediumImageUrl,
-    String thumbnailImageUrl}){
+    int? id,
+    int? width,
+    int? height,
+    String? largeImageUrl,
+    String? mediumImageUrl,
+    String? thumbnailImageUrl}){
     _id = id;
     _width = width;
     _height = height;
@@ -240,27 +240,27 @@ class Files {
 /// mediumImageUrl : "http://localhost:3001/files/374/serve?size=medium"
 
 class CoverImage {
-  int _id;
-  String _small;
-  int _width;
-  int _height;
-  String _largeImageUrl;
-  String _mediumImageUrl;
+  int? _id;
+  String? _small;
+  int? _width;
+  int? _height;
+  String? _largeImageUrl;
+  String? _mediumImageUrl;
 
-  int get id => _id;
-  String get small => _small;
-  int get width => _width;
-  int get height => _height;
-  String get largeImageUrl => _largeImageUrl;
-  String get mediumImageUrl => _mediumImageUrl;
+  int? get id => _id;
+  String? get small => _small;
+  int? get width => _width;
+  int? get height => _height;
+  String? get largeImageUrl => _largeImageUrl;
+  String? get mediumImageUrl => _mediumImageUrl;
 
   CoverImage({
-    int id,
-    String small,
-    int width,
-    int height,
-    String largeImageUrl,
-    String mediumImageUrl}){
+    int? id,
+    String? small,
+    int? width,
+    int? height,
+    String? largeImageUrl,
+    String? mediumImageUrl}){
     _id = id;
     _small = small;
     _width = width;
@@ -296,18 +296,18 @@ class CoverImage {
 /// avatar : {"largeAvatarUrl":"https://api.lishaoy.net/avatar/2?size=large","smallAvatarUrl":"https://api.lishaoy.net/avatar/2?size=small","mediumAvatarUrl":"https://api.lishaoy.net/avatar/2?size=medium"}
 
 class User {
-  int _id;
-  String _name;
-  Avatar _avatar;
+  int? _id;
+  String? _name;
+  Avatar? _avatar;
 
-  int get id => _id;
-  String get name => _name;
-  Avatar get avatar => _avatar;
+  int? get id => _id;
+  String? get name => _name;
+  Avatar? get avatar => _avatar;
 
   User({
-    int id,
-    String name,
-    Avatar avatar}){
+    int? id,
+    String? name,
+    Avatar? avatar}){
     _id = id;
     _name = name;
     _avatar = avatar;
@@ -324,7 +324,7 @@ class User {
     map["id"] = _id;
     map["name"] = _name;
     if (_avatar != null) {
-      map["avatar"] = _avatar.toJson();
+      map["avatar"] = _avatar!.toJson();
     }
     return map;
   }
@@ -336,18 +336,18 @@ class User {
 /// mediumAvatarUrl : "https://api.lishaoy.net/avatar/2?size=medium"
 
 class Avatar {
-  String _largeAvatarUrl;
-  String _smallAvatarUrl;
-  String _mediumAvatarUrl;
+  String? _largeAvatarUrl;
+  String? _smallAvatarUrl;
+  String? _mediumAvatarUrl;
 
-  String get largeAvatarUrl => _largeAvatarUrl;
-  String get smallAvatarUrl => _smallAvatarUrl;
-  String get mediumAvatarUrl => _mediumAvatarUrl;
+  String? get largeAvatarUrl => _largeAvatarUrl;
+  String? get smallAvatarUrl => _smallAvatarUrl;
+  String? get mediumAvatarUrl => _mediumAvatarUrl;
 
   Avatar({
-    String largeAvatarUrl,
-    String smallAvatarUrl,
-    String mediumAvatarUrl}){
+    String? largeAvatarUrl,
+    String? smallAvatarUrl,
+    String? mediumAvatarUrl}){
     _largeAvatarUrl = largeAvatarUrl;
     _smallAvatarUrl = smallAvatarUrl;
     _mediumAvatarUrl = mediumAvatarUrl;

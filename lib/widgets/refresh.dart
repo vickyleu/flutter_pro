@@ -5,10 +5,10 @@ import 'package:pro_flutter/widgets/over_scroll_behavior.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Refresh extends StatelessWidget {
-  final RefreshController controller;
-  final VoidCallback onRefresh;
-  final VoidCallback onLoading;
-  final Widget content;
+  final RefreshController? controller;
+  final VoidCallback? onRefresh;
+  final VoidCallback? onLoading;
+  final Widget? content;
 
   Refresh({this.controller, this.onRefresh, this.onLoading, this.content});
 
@@ -21,12 +21,12 @@ class Refresh extends StatelessWidget {
         child: ScrollConfiguration(
           behavior: OverScrollBehavior(),
           child: SmartRefresher(
-            controller: this.controller,
+            controller: this.controller!,
             enablePullDown: true,
             enablePullUp: true,
             header: CustomHeader(
-              builder: (BuildContext context, RefreshStatus mode) {
-                Widget body;
+              builder: (BuildContext context, RefreshStatus? mode) {
+                Widget? body;
                 if (mode == RefreshStatus.canRefresh) {
                   body = textIndicator("松开刷新");
                 } else if (mode == RefreshStatus.refreshing) {
@@ -47,7 +47,7 @@ class Refresh extends StatelessWidget {
             ),
             footer: CustomFooter(
               loadStyle: LoadStyle.ShowWhenLoading,
-              builder: (BuildContext context, LoadStatus mode) {
+              builder: (BuildContext context, LoadStatus? mode) {
                 Widget body;
                 if (mode == LoadStatus.idle) {
                   body = Text("上拉加载", style: TextStyle(fontSize: 12));

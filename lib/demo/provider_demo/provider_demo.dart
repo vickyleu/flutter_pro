@@ -46,9 +46,9 @@ class ProviderDemo extends StatelessWidget {
 }
 
 class ListItem extends StatelessWidget {
-  final String title;
-  final Widget page;
-  final Widget icon;
+  final String? title;
+  final Widget? page;
+  final Widget? icon;
 
   ListItem({
     this.title,
@@ -61,10 +61,10 @@ class ListItem extends StatelessWidget {
     return Column(
       children: <Widget>[
         ListTile(
-          title: Text(title),
+          title: Text(title!),
           onTap: () {
             Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => page),
+              MaterialPageRoute(builder: (context) => page!),
             );
           },
           leading: icon,

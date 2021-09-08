@@ -16,8 +16,10 @@ class OverScrollBehavior extends ScrollBehavior {
           axisDirection: axisDirection,
           color: Theme.of(context).accentColor,
         );
+      default:
+        break;
     }
-    return null;
+    return Container();
   }
 
 }

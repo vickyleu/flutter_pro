@@ -6,9 +6,9 @@ import 'package:pro_flutter/http/header_interceptor.dart';
 class BaseDio {
   BaseDio._();
 
-  static BaseDio _instance;
+  static BaseDio? _instance;
 
-  static BaseDio getInstance() {
+  static BaseDio? getInstance() {
     _instance ??= BaseDio._();
 
     return _instance;
@@ -36,7 +36,7 @@ class BaseDio {
     switch (obj.runtimeType) {
       case DioError:
         if ((obj as DioError).type == DioErrorType.response) {
-          final response = (obj as DioError).response;
+          final response = obj.response!;
           if (response.statusCode == 401) {
             return NeedLogin();
           } else if (response.statusCode == 403) {

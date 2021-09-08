@@ -7,10 +7,10 @@ import 'package:pro_flutter/widgets/page_state.dart';
 import 'package:sp_util/sp_util.dart';
 
 class LoginState {
-  final Login login;
-  final bool isLogin;
-  final PageState pageState;
-  final BaseError error;
+  final Login? login;
+  final bool? isLogin;
+  final PageState? pageState;
+  final BaseError? error;
 
   LoginState({this.login, this.isLogin, this.pageState, this.error});
 
@@ -21,10 +21,10 @@ class LoginState {
         error = null;
 
   LoginState copyWith({
-    Login login,
-    bool isLogin,
-    PageState pageState,
-    BaseError error,
+    Login? login,
+    bool? isLogin,
+    PageState? pageState,
+    BaseError? error,
   }) {
     return LoginState(
         login: login ?? this.login,
@@ -35,7 +35,7 @@ class LoginState {
 }
 
 class LoginViewModel extends StateNotifier<LoginState> {
-  LoginViewModel([LoginState state]) : super(state ?? LoginState.initial());
+  LoginViewModel([LoginState? state]) : super(state ?? LoginState.initial());
 
   Future<void> login(String name, String pwd) async {
 
@@ -44,14 +44,14 @@ class LoginViewModel extends StateNotifier<LoginState> {
     try {
       LoginModel model = await ApiClient().login(state.login);
       if (model.message == 'success') {
-        SpUtil.putObject('User', model.data);
-        SpUtil.putString('Authorization', 'Bearer ${model.data.token}');
+        SpUtil.putObject('User', model.data!);
+        SpUtil.putString('Authorization', 'Bearer ${model.data!.token}');
         state = state.copyWith(isLogin: true, error: null);
       }
     } catch (e) {
       state = state.copyWith(
         pageState: PageState.errorState,
-        error: BaseDio.getInstance().getDioError(e),
+        error: BaseDio.getInstance()!.getDioError(e),
       );
     }
   }

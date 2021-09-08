@@ -24,7 +24,7 @@ class _DrawerDemoState extends State<DrawerDemo> {
                 image: NetworkImage('https://cdn.lishaoy.net/image/Black-and-White-Gorilla.webp'),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
-                  Colors.yellow[400].withOpacity(0.65),
+                  Colors.yellow[400]!.withOpacity(0.65),
                   BlendMode.lighten
                 )
               )

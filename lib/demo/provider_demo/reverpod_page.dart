@@ -12,18 +12,18 @@ class HttpClient {
 }
 
 final httpProvider = Provider((ref) => HttpClient());
-final responseProvider =
+final AutoDisposeFutureProviderFamily<String, String>? responseProvider =
     FutureProvider.autoDispose.family<String, String>((ref, url) async {
   return ref.read(httpProvider).get(url);
 });
 
 class ReverPodPage extends ConsumerWidget {
-  const ReverPodPage({Key key}) : super(key: key);
+  const ReverPodPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, ScopedReader wacth) {
     final hello = wacth(helloRiverpod);
-    var respones = wacth(responseProvider('https://lishaoy.net'));
+    var respones = wacth(responseProvider!('https://lishaoy.net'));
     return Scaffold(
       appBar: AppBar(
         title: Text(hello),

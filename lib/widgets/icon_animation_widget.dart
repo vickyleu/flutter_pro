@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class IconAnimationWidget extends StatefulWidget {
-  final Widget icon;
-  final VoidCallback clickCallback;
+  final Widget? icon;
+  final VoidCallback? clickCallback;
 
   IconAnimationWidget({this.icon, this.clickCallback});
 
@@ -12,8 +12,8 @@ class IconAnimationWidget extends StatefulWidget {
 
 class _IconAnimationWidgetState extends State<IconAnimationWidget>
     with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
-  Animation _iconAnimation;
+  late AnimationController _animationController;
+  late Animation _iconAnimation;
 
   @override
   void initState() {
@@ -42,7 +42,7 @@ class _IconAnimationWidgetState extends State<IconAnimationWidget>
   @override
   Widget build(BuildContext context) {
     return ScaleTransition(
-      scale: _iconAnimation,
+      scale: _iconAnimation as Animation<double>,
       child: GestureDetector(
         child: widget.icon,
         onTap: _clickIcon,
@@ -60,6 +60,10 @@ class _IconAnimationWidgetState extends State<IconAnimationWidget>
     } else if (_iconAnimation.status == AnimationStatus.completed) {
       _animationController.reverse();
     }
-    await widget.clickCallback();
+    final call = widget.clickCallback;
+    if(call!=null){
+       call.call();
+    }
+
   }
 }

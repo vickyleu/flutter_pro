@@ -4,9 +4,9 @@ import 'package:pro_flutter/demo/model/counter_model.dart';
 import 'counter_page.dart';
 
 class ProviderCounterDemo extends StatelessWidget {
-  const ProviderCounterDemo({Key key, this.title}) : super(key: key);
+  const ProviderCounterDemo({Key? key, this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class ProviderCounterDemo extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(title!),
       ),
       body: Center(
         child: Column(
@@ -30,7 +30,7 @@ class ProviderCounterDemo extends StatelessWidget {
                   '$count',
                   style: Theme.of(context).textTheme.headline4,
                 );
-              },
+              } as Widget Function(BuildContext, T Function<T>(ProviderBase<Object?, T>), Widget?),
             ),
           ],
         ),

@@ -3,11 +3,11 @@ class StreamDemoState{}
 class InitializedState extends StreamDemoState {}
 
 class DataFetchedState extends StreamDemoState {
-  final List<String> data;
+  final List<String>? data;
 
   DataFetchedState({this.data});
 
-  bool get hasData => data.length > 0;
+  bool get hasData => data!.length > 0;
 }
 
 class ErrorState extends StreamDemoState{}
